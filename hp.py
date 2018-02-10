@@ -230,6 +230,19 @@ def mm_to_yards(mm):
 def mm_to_miles(mm):
     return yards_to_miles(mm_to_yards(mm))
 
+def sq_inches_to_sq_mm(sq_inches):
+    return inches_to_mm(inches_to_mm(sq_inches))
+def sq_feet_to_sq_mm(sq_feet):
+    return feet_to_mm(feet_to_mm(sq_feet))
+def sq_m_to_sq_mm(sq_m):
+    return meters_to_mm(meters_to_mm(sq_m))
+def sq_km_to_sq_mm(sq_km):
+    return km_to_mm(km_to_mm(sq_km))
+def sq_yards_to_sq_mm(sq_yards):
+    return yards_to_mm(yards_to_mm(sq_yards))
+def sq_miles_to_sq_mm(sq_miles):
+    return miles_to_mm(miles_to_mm(sq_miles))
+
 # Angle
 
 FULL_ROT_DEGREES = 360
@@ -1422,16 +1435,16 @@ def display_distance(title, mm):
     print('Miles                  : ', mm_to_miles(mm))
     print('')
 
-def display_area(title, mm_squared):
+def display_area(title, square_mm):
     print(title)
-    print('Millimeters ^ 2        : ', mm_squared)
-    print('Centimeters ^ 2        : ', mm_to_cm(mm_to_cm(mm_squared)))
-    print('Meters      ^ 2        : ', mm_to_meters(mm_to_meters(mm_squared)))
-    print('Inches      ^ 2        : ', mm_to_inches(mm_to_inches(mm_squared)))
-    print('Feet        ^ 2        : ', mm_to_feet(mm_to_feet(mm_squared)))
-    print('Yards       ^ 2        : ', mm_to_yards(mm_to_yards(mm_squared)))
-    print('Kilometers  ^ 2        : ', mm_to_km(mm_to_km(mm_squared)))
-    print('Miles       ^ 2        : ', mm_to_miles(mm_to_miles(mm_squared)))
+    print('Square Millimeters     : ', square_mm)
+    print('Square Centimeters     : ', mm_to_cm(mm_to_cm(square_mm)))
+    print('Square Meters          : ', mm_to_meters(mm_to_meters(square_mm)))
+    print('Square Inches          : ', mm_to_inches(mm_to_inches(square_mm)))
+    print('Square Feet            : ', mm_to_feet(mm_to_feet(square_mm)))
+    print('Square Yards           : ', mm_to_yards(mm_to_yards(square_mm)))
+    print('Square Kilometers      : ', mm_to_km(mm_to_km(square_mm)))
+    print('Square Miles           : ', mm_to_miles(mm_to_miles(square_mm)))
     print('')
 
 def display_angle(title, degrees):
@@ -2109,10 +2122,10 @@ def prompt_scooter_mph_from_hp():
     print('Air Density' , rho)
     v = miles_hour_to_meters_sec(mph)
     drag_force_newtons = rho * v * v * Cd * feet_to_meters(feet_to_meters(A)) / 2
-    drag_force = newtons_to_kg(drag_force_newtons)
+    drag_force = kg_to_lbs(newtons_to_kg(drag_force_newtons))
     force_lbs = rolling_resistance + drag_force
     display_force('Rolling Resistance', lbs_to_kg(rolling_resistance))
-    display_force('Drag Force ',drag_force)
+    display_force('Drag Force ', lbs_to_kg(drag_force))
     display_force('Force required', lbs_to_kg(force_lbs))
     # now we need the radius of the wheel for ft-lbs
     circum_inches = prompt_moped_tire_circumference()
@@ -2123,6 +2136,7 @@ def prompt_scooter_mph_from_hp():
     ratio = ask_gear_ratio()
     rpm = calc_nc50_rpm(ratio, circum_inches, mph)
     display_angular_velocity('RPM',rpm)
+    # We know torque, we know RPM, therefore, we know HP
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
@@ -2421,10 +2435,10 @@ def oil_ratio_menu():
             oil_ratio = prompt('Oil Ratio [%s]', 40)
             print('Gallons of Gas : ', calc_gallons_of_gas_from_oil_ounces_ratio(ounces_of_oil, oil_ratio))
 
-def measurement_menu():
+def distance_menu():
     choice = ''
     while choice.strip() != 'x':
-        print('\nMeasurement Menu')
+        print('\nDistance Menu')
         print('1. Convert Feet')
         print('2. Convert Inches')
         print('3. Convert Millimeters')
@@ -2451,6 +2465,49 @@ def measurement_menu():
         if choice == '6':
             km = prompt('Kilometers [%s]', 1)
             display_distance('', km_to_mm(km))
+
+def area_menu():
+    choice = ''
+    sq_mm = 1
+    while choice.strip() != 'x':
+        print('\nArea Menu')
+        print('1. Convert Square Feet')
+        print('2. Convert Square Inches')
+        print('3. Convert Square Millimeters')
+        print('4. Convert Square Meters')
+        print('5. Convert Square Kilometers')
+        print('6. Convert Square Yards')
+        print('7. Convert Square Miles')
+        print('x. Exit')
+        choice = selection()
+        if choice == '1':
+            feet = prompt('Square Feet [%s]', 1)
+            sq_mm = sq_feet_to_sq_mm(feet)
+            display_area('', sq_mm)
+        if choice == '2':
+            sq_inches = prompt('Square Inches [%s]', 1)
+            sq_mm = sq_inches_to_sq_mm(sq_inches)
+            display_area('', sq_mm)
+        if choice == '3':
+            sq_mm = prompt('Square Millimeters [%s]', 1)
+            display_area('', sq_mm)
+        if choice == '4':
+            sq_m = prompt('Square Meters [%s]', 1)
+            sq_mm = sq_m_to_sq_mm(sq_m)
+            display_area('', sq_mm)
+        if choice == '5':
+            sq_km = prompt('Square Kilometers [%s]', 1)
+            sq_mm = sq_km_to_sq_mm(sq_km)
+            display_area('', sq_mm)
+        if choice == '6':
+            sq_yards = prompt('Square Yards [%s]', 1)
+            sq_mm = sq_yards_to_sq_mm(sq_yards)
+            display_area('', sq_mm)
+        if choice == '7':
+            sq_miles = prompt('Square Miles [%s]', 1)
+            sq_mm = sq_miles_to_sq_mm(sq_miles)
+            display_area('', sq_mm)
+    return sq_mm
 
 def velocity_menu():
     choice = ''
@@ -2746,9 +2803,10 @@ while choice.strip() != 'x':
             '15' : oil_ratio_menu,
             '16' : port_mapping_menu,
             '17' : prompt_scooter_mph_from_hp,
+            'A'  : area_menu,
             'a'  : angular_velocity_menu,
             'b'  : bmep_menu,
-            'd'  : measurement_menu,
+            'd'  : distance_menu,
             'e'  : energy_menu,
             'h'  : horsepower_menu,
             'i'  : ideal_gas_menu,
@@ -2778,6 +2836,7 @@ while choice.strip() != 'x':
     print('15. Oil Ratio Mixture')
     print('16. Port Mapping')
     print('17. Calculate Scooter MPH from HP')
+    print(' A. Convert Area')
     print(' a. Convert Angular Velocity')
     print(' b. Convert BMEP')
     print(' d. Convert Distance')
