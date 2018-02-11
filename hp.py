@@ -145,6 +145,10 @@ def newtons_to_kg(newtons):
     return newtons / STANDARD_GRAVITY
 def kg_to_newtons(kg):
     return kg * STANDARD_GRAVITY
+def lbs_to_newtons(lbs):
+    return kg_to_newtons(lbs_to_kg(lbs))
+def newtons_to_lbs(newtons):
+    return kg_to_lbs(newtons_to_kg(newtons))
 
 # Distance
 
@@ -483,12 +487,18 @@ def ft_lbs_to_inch_lbs(ft_lbs_force):
     return feet_to_inches(ft_lbs_force)
 def ft_lbs_to_kg_m(ft_lbs_force):
     return lbs_to_kg(feet_to_meters(ft_lbs_force))
+def kg_m_to_ft_lbs(kg_m):
+    return kg_to_lbs(meters_to_feet(kg_m))
 # newton-meter is kg-m * gravity, kg-m * m/s^2, kg-m * 9.8 m/s^2
 # https://en.wikipedia.org/wiki/Newton_metre
 def kg_m_to_newton_m(kg_m):
     return kg_m * STANDARD_GRAVITY
+def newton_m_to_kg_m(newtons):
+    return newtons / STANDARD_GRAVITY
 def ft_lbs_to_newton_m(ft_lbs_force):
     return kg_m_to_newton_m(ft_lbs_to_kg_m(ft_lbs_force))
+def newton_m_to_ft_lbs(newton_meters):
+    return kg_m_to_ft_lbs(newton_m_to_kg_m(newton_meters))
 # newton-meters and joules are dimensionally equivalent
 def ft_lbs_to_joules(ft_lbs_force):
     return ft_lbs_to_newton_m(ft_lbs_force)
@@ -586,6 +596,9 @@ def metric_hp_to_kg_m_per_sec(metric_hp):
     return metric_hp * KG_M_PER_SEC_PER_METRIC_HP
 def metric_hp_to_imperial_hp(metric_hp):
     return kg_m_per_sec_to_imperial_hp(metric_hp_to_kg_m_per_sec(metric_hp))
+def newtons_and_meters_per_sec_to_watts(newtons, m_per_sec):
+    watts = newtons * m_per_sec
+    return watts
 
 # Energy
 
@@ -1515,10 +1528,11 @@ def display_mass(title, kg):
     print('Mass   in pounds (lb)  : ',kg_to_lbs(kg))
     print('')
 
-def display_force(title, kg):
+def display_force(title, newtons):
     print(title)
-    print('Force  in kilograms    : ',kg)
-    print('Force  in pounds (lb)  : ',kg_to_lbs(kg))
+    print('Force  in newtons      : ',newtons)
+    print('Force  in kilograms    : ',newtons_to_kg(newtons))
+    print('Force  in pounds (lbf) : ',newtons_to_lbs(newtons))
     print('')
 
 def display_liquid_capacity(title, cc):
@@ -1783,6 +1797,12 @@ def ask_ft_lbs_force():
     ft_lbs_force = prompt('Foot Lbs Force [%s]', 550)
     print('')
     return ft_lbs_force
+
+def ask_newton_meters_force():
+    list_peak_torque()
+    newton_m = prompt('Newtons Meters [%s]', 1)
+    print('')
+    return newton_m
 
 def ask_hp():
     list_peak_hp_rpms()
@@ -2103,40 +2123,37 @@ def prompt_scooter_mph_from_hp():
     # Pick say an arbitrary wheel size of 1 ft, then the torque required would be 16.35 ft lbs. Given 40 mph, it will need to spin at 560.5 rpm.
     # Following is from http://en.wikipedia.org/wiki/Torque :
     # Power (hp) = (torque (lbf x ft) x angular speed (rpm))/5252 = 1.745 hp or 1301.97 watts.
-    # I may have screwed something up, and this doesn't take into
-    # account the 2% grade. This is the fist time I've done the
-    # above calculations, but they look like they may be close.
-    # This doesn't take into account the power required to accelerate,
-    # only constant speed.
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     Cr = ask_rolling_resistance_factor()
-    scooter_lbs = ask_lbs_mass('Scooter weight in lbs', 100)
-    rider_lbs = ask_lbs_mass('Rider and backpack weight in lbs', 200)
+    scooter_newtons = lbs_to_newtons(ask_lbs_mass('Scooter weight in lbs', 100))
+    rider_newtons = lbs_to_newtons(ask_lbs_mass('Rider and backpack weight in lbs', 200))
     Cd = ask_coefficient_of_drag()
     A = ask_sq_ft_area('Frontal area in square feet', 6)
     mph = ask_mph('Maximum Velocity', 25)
-    rolling_resistance = (Cr * (scooter_lbs + rider_lbs))
+    rolling_resistance = (Cr * (scooter_newtons + rider_newtons))
     rho = ask_air_density()
     print('Air Density' , rho)
     v = miles_hour_to_meters_sec(mph)
-    drag_force_newtons = rho * v * v * Cd * feet_to_meters(feet_to_meters(A)) / 2
-    drag_force = kg_to_lbs(newtons_to_kg(drag_force_newtons))
-    force_lbs = rolling_resistance + drag_force
-    display_force('Rolling Resistance', lbs_to_kg(rolling_resistance))
-    display_force('Drag Force ', lbs_to_kg(drag_force))
-    display_force('Force required', lbs_to_kg(force_lbs))
+    drag_force = rho * v * v * Cd * feet_to_meters(feet_to_meters(A)) / 2
+    force = rolling_resistance + drag_force
+    display_force('Rolling Resistance', rolling_resistance)
+    display_force('Drag Force ', drag_force)
+    display_force('Force required', force)
     # now we need the radius of the wheel for ft-lbs
     circum_inches = prompt_moped_tire_circumference()
     radius_feet = inches_to_feet(calc_geom_radius_from_circumference(circum_inches))
     display_distance('Tire Radius', feet_to_mm(radius_feet))
-    torque = force_lbs * radius_feet
+    torque = newtons_to_lbs(force) * radius_feet
     display_energy('Torque', torque)
+    # We know torque, we know RPM, therefore, we know HP, HP = Force * Velocity
+    watts = newtons_and_meters_per_sec_to_watts(force, v)
+    hp = watts_to_imperial_hp(watts)
+    display_hp('Horsepower', hp)
     ratio = ask_gear_ratio()
     rpm = calc_nc50_rpm(ratio, circum_inches, mph)
     display_angular_velocity('RPM',rpm)
-    # We know torque, we know RPM, therefore, we know HP
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
@@ -2291,6 +2308,10 @@ def prompt_speed_sound():
 def prompt_ft_lbs_force():
     ft_lbs_force = ask_ft_lbs_force()
     display_energy('Energy', ft_lbs_force)
+
+def prompt_newtons_meters_force():
+    newton_meters = ask_newton_meters_force()
+    display_energy('Energy', newton_m_to_ft_lbs(newton_meters))
 
 def prompt_btus_per_lb_specific_energy():
     btus_per_lb = ask_fuel_specific_energy_btus_per_lb()
@@ -2701,11 +2722,14 @@ def energy_menu():
     while choice.strip() != 'x':
         print('\nEnergy (Torque) Menu')
         print('1. Convert Ft-Lbs of Force')
+        print('2. Convert Newtons/Meters of Force')
         print('x. Exit')
         choice = selection()
         print('')
         if choice == '1':
             prompt_ft_lbs_force()
+        if choice == '2':
+            prompt_newtons_meters_force()
 
 def specific_energy_menu():
     choice = ''
