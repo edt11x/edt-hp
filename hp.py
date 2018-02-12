@@ -1,3 +1,20 @@
+#
+# This is a standalone Python script to help me thinking about modifications to
+# engines, mostly little two stroke scooter engines. This is a standalone script
+# that can run without any additional modules, runs on Python 2 and Python 3, runs
+# on Windows, Mac, Linux, IOS (Pythonista) and Android. I take some care to make
+# sure it keeps running on IOS, since I often drag my iPad out to the garage.
+#
+# I would really like to depend on the physics module, since it will give me
+# quantities with units attached. In the 1990s, I would write a lot of these
+# type of functions on a TI-89 and TI-92plus. Both of these carry the units
+# along with the number and its great for balancing out equations.
+#
+# I like to dump out various forms of the measurements because the use of units
+# is all over the board in papers, books, etc. For example, in electric cars, the
+# seem to tend to use Newton meters and kilowatts, and lots of hot rod articles
+# are only HP, and foot lbs.
+#
 from __future__ import print_function
 import math
 import sys
@@ -2107,6 +2124,13 @@ def prompt_scooter_mph_from_hp():
     # A: is the reference area
     # 
     # [1]: https://en.wikipedia.org/wiki/Drag_coefficient
+    #
+    # Right now, the suggested values are garbage, but I have a plan for that
+    # I have captured pictures to measure the frontal area of me ridding the
+    # scooter.
+    #
+    # For rolling resistance, I am going to make multiple runs, doing a throttle chop
+    # at 5, 10, 15, and 20 MPH and measure the distance I coast until it stops moving.
     #
     # From https://visforvoltage.org/forum-topic/general/526-horsepower-calculations
     #
