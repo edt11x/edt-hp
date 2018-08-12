@@ -22,7 +22,7 @@ import sys
 # Try to include modules we would like to use.
 # Really, right now, we just want mpmath to get more precision, this helps with
 # rounding errors when converting back and forth
-libnames = ['numpy', 'scipy', 'operator', 'mpmath']
+libnames = ['numpy', 'scipy', 'operator', 'mpmath', 'pylab']
 for libname in libnames:
     try:
         lib = __import__(libname)
@@ -1020,24 +1020,63 @@ def choked_throat_pressure(p0, k):
 
 # List routines
 
+# http://www.ford-y-block.com/dimensions.htm
+#
+# Y-Block Dimensions and weights         ford-y-block.com
+#
+# Bore &  Stroke          rod length  R:S ratio   pin diam  pin wt   piston wt.  rod wt.   comp. ht.
+# 239 cu.in. 3.50X 3.10"  EBU 6.324"  2.038:1     .9122"       gr    24.06oz     680gr     1.858"
+# 256 cu.in 3.62X 3.10"   EBU 6.324"  2.038:1     .9122"       gr    24.06oz     680gr     1.858"
+# 272 cu.in. 3.62X 3.30"  EBU 6.324"  1.915:1     .9122"    161gr    531gr       680gr     1.768"
+# 292 cu.in 3.75X 3.30"   EBU 6.324"  1.915:1     .9122"    143gr    555gr       680gr     1.768"
+# 292 cu.in. 3.75X 3.30"  C2AE 6.324" 1.915:1     .9122"    143gr    555gr       695gr     1.768"
+# 292 HD trk 3.75X 3.30"  C1TE 6.252" 1.894:1     .9122"       gr    663gr                 1.830"
+# 312 cu.in 3.80X 3.44"   ECZ 6.252"  1.816:1     .9122"    143gr    585gr       638gr     1.768"
+#
+# 239 & 256 used EBU 3.10" stroke crankshaft       ford-y-block.com
+# 272 & 292 used EC 3.30" crankshaft               see CRANKSHAFT IDENTIFICATION
+# 312 used ECZ 3.44" crankshaft
+#
+# Rod journal diameter: all                        2.1880-2.1888" standard
+# Main journal diameter 239-256-272-292:           2.4980-2.4988" standard
+# Main journal diameter 312:                       2.6240-2.6248" standard
+#
+# Block deck:                                      9.775"
+#
+# APPROXIMATE WEIGHTS
+# BARE BLOCK                                       155 pounds
+# LONG BLOCK                                       535 pounds
+# COMPLETE ENGINE                                  610 pounds
+# CYLINDERHEAD   BARE                              49 pounds        Aluminum 24.5#
+# CYLINDERHEAD COMPLETE                            56 pounds        Aluminum 28#
+# CRANKSHAFT      292                              53 pounds
+# CRANKSAHFT      312                              58 pounds
+# CRANKSHAFT      292 STEEL                        60 pounds
+# TIMING COVER                                     16 pounds        Mummert aluminum 9 pounds
+# FLYWHEEL                                         30 pounds        Mummert aluminum 15 pounds
+# INTAKE MANIFOLD                                  31 pounds        Mummert aluminum 14 pounds
+#
 # https://en.wikipedia.org/wiki/Mazda_K_engine
 def list_bore_strokes():
     print('From Heywood')
     print('Bore/Stroke small and medium engines 0.8 to 1.2')
     print('Bore/Stroke large slow speed CI engines 0.5 to 0.8')
-    print('NC50 stock  bore -  40.0, stroke  39.6, cyl 1, b/s', str(round(40.0/39.6,2)))
-    print('NC50 shocko bore -  44.0, stroke  39.6, cyl 1, b/s', str(round(44.0/39.6,2)))
-    print('NC50 athena bore -  47.6, stroke  39.6, cyl 1, b/s', str(round(47.6/39.6,2)))
-    print('NC50 metra  bore -  47.0, stroke  39.6, cyl 1, b/s', str(round(47.0/39.6,2)))
-    print('TRX250R     bore -  66.0, stroke  72.0, cyl 1, b/s', str(round(66.0/72.0,2)))
-    print('ZXI  1100   bore -  80.0, stroke  71.0, cyl 3, b/s', str(round(80.0/71.0,2)))
-    print('06 SXR 800  bore -  82.0, stroke  74.0, cyl 2, b/s', str(round(82.0/74.0,2)))
-    print('87 Must 5.0 bore - 101.6, stroke  76.2, cyl 8, b/s', str(round(101.6/76.2,2)))
-    print('04 Must 4.6 bore -  90.2, stroke  90.0, cyl 8, b/s', str(round(90.2/90.0,2)))
-    print('77 Cad  425 bore - 103.7, stroke 103.0, cyl 8, b/s', str(round(103.7/103.0,2)))
-    print('95 Probe2.5 bore -  84.5, stroke  74.2, cyl 6, b/s', str(round(84.5/74.2,2)))
-    print('16 Ford 5.2 bore -  94.0, stroke  93.0, cyl 8, b/s', str(round(94.0/93.0,2)))
-    print('18 Ford 5.0 bore -  93.0, stroke  92.7, cyl 8, b/s', str(round(93.0/92.7,2)))
+    print('NC50 stock  bore -  40.0 , stroke  39.6 , cyl 1, b/s', str(round(40.0/39.6,2)))
+    print('NC50 shocko bore -  44.0 , stroke  39.6 , cyl 1, b/s', str(round(44.0/39.6,2)))
+    print('NC50 athena bore -  47.6 , stroke  39.6 , cyl 1, b/s', str(round(47.6/39.6,2)))
+    print('NC50 metra  bore -  47.0 , stroke  39.6 , cyl 1, b/s', str(round(47.0/39.6,2)))
+    print('TRX250R     bore -  66.0 , stroke  72.0 , cyl 1, b/s', str(round(66.0/72.0,2)))
+    print('ZXI  1100   bore -  80.0 , stroke  71.0 , cyl 3, b/s', str(round(80.0/71.0,2)))
+    print('06 SXR 800  bore -  82.0 , stroke  74.0 , cyl 2, b/s', str(round(82.0/74.0,2)))
+    print('56 272 Yblk bore - ',str(round(inches_to_mm(3.62),1)),', stroke ',
+                                str(round(inches_to_mm(3.30),1)),', cyl 8, b/s',
+                                str(round(3.62/3.30,2)))
+    print('87 Must 5.0 bore - 101.6 , stroke  76.2 , cyl 8, b/s', str(round(101.6/76.2,2)))
+    print('04 Must 4.6 bore -  90.2 , stroke  90.0 , cyl 8, b/s', str(round(90.2/90.0,2)))
+    print('77 Cad  425 bore - 103.7 , stroke 103.0 , cyl 8, b/s', str(round(103.7/103.0,2)))
+    print('95 Probe2.5 bore -  84.5 , stroke  74.2 , cyl 6, b/s', str(round(84.5/74.2,2)))
+    print('16 Ford 5.2 bore -  94.0 , stroke  93.0 , cyl 8, b/s', str(round(94.0/93.0,2)))
+    print('18 Ford 5.0 bore -  93.0 , stroke  92.7 , cyl 8, b/s', str(round(93.0/92.7,2)))
 
 def list_carb_bores():
     print('NC50 stock    carb bore - 12.0mm')
@@ -1049,12 +1088,13 @@ def list_manifold_bores():
     print('MLM 20mm  manifold bore - 21.6mm')
 
 def list_connecting_rod_lengths():
-    print('1985-1986 TRX250R - 125.3mm')
-    print('1987-1989 TRX250R - 130.3mm')
-    print('1977 NC50         -  80.0mm')
+    print('1985-1986 TRX250R - 125.3 mm')
+    print('1987-1989 TRX250R - 130.3 mm')
+    print('1977 NC50         -  80.0 mm')
+    print('56 272 Yblk       - ', str(round(inches_to_mm(6.324),1)), 'mm')
     print('87 Must 5.0       - 129.286 mm, 5.090 in')
-    print('04 Must 4.6       - 150.7mm')
-    print('16 Ford 5.2 Voodo - 150.7mm')
+    print('04 Must 4.6       - 150.7 mm')
+    print('16 Ford 5.2 Voodo - 150.7 mm')
 
 # http://www.ridermagazine.com/manufacturer/honda/retrospective-honda-ncna50-express-1977-1983.htm/
 #
@@ -1144,6 +1184,7 @@ def list_compression_ratios():
     print('TRX250R           - 10.0')
     print('06 SXR 800 Stock  - 7.2')
     print('ZXI 1100 stock    - 5.8')
+    print('57 272 Yblk       - 7.8')
     print('87 Must 5.0       - 9.0')
     print('04 Must GT 4.6L   - 9.4')
     print('77 Cad  425       - 8.2')
@@ -1263,7 +1304,6 @@ def air_fuel_ratio_to_lambda(af_ratio,stoich):
 def af_ratio_and_lambda_to_str(af_ratio,stoich):
     return "%5.2f, lambda - %.4f" % (af_ratio,air_fuel_ratio_to_lambda(af_ratio,stoich))
 
-
 # http://www.hotrod.com/articles/wideband-oxygen-sensor/
 def list_air_fuel_ratio():
     print('Air/Fuel Ratio')
@@ -1321,6 +1361,9 @@ def list_volumetric_efficiency():
     print('Racing Engines    = 0.90 - 1.00')
     print('2Stroke Good Pipe = 1.00')
     print('2Stroke OK   Pipe = 0.90')
+    print('1950s or 1960s cars 0.85')
+    print('1980s or 1990s cars 0.90')
+    print('Well designed normal aspirated engines 1.0')
 
 def list_clearance_volume():
     print('Clearance Volume')
@@ -1504,6 +1547,13 @@ def display_hp(title, hp):
     print('Foot-Lbs  per Second   : ', imperial_hp_to_ft_lbs_per_sec(hp))
     print('Foot-Lbs  per Minute   : ', imperial_hp_to_ft_lbs_per_min(hp))
     print('kg-meters per Second   : ', imperial_hp_to_kg_m_per_sec(hp))
+    print('')
+
+def display_hp_per_liter(title, hp, sv):
+    print(title)
+    print('HP US or Imperial/liter: ', hp / cc_to_liters(sv))
+    print('HP metric(aka PS)/liter: ', imperial_hp_to_metric_hp(hp) / cc_to_liters(sv))
+    print('HP (UK)          /liter: ', hp_to_hp_uk(hp) / cc_to_liters(sv))
     print('')
 
 def display_energy(title, ft_lbs_force):
@@ -1926,6 +1976,7 @@ def horsepower_torque_from_mep(mep, sv, rpm, cycles):
     list_peak_hp_rpms()
     print('')
     display_hp('\nHorsepower', hp)
+    display_hp_per_liter('\nHorsepower per liter', hp, sv)
     torque = hp_to_torque(hp, rpm)
     display_energy('\nTorque', torque)
 
@@ -2181,7 +2232,6 @@ def prompt_scooter_mph_from_hp():
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-
 
 # This is a calculation of the maximum mass flow through a carb,
 # through a venturi. This happens when the speed of the fluid, air,
@@ -2830,6 +2880,9 @@ def prompt_compression_ratio():
         if choice == '2':
             prompt_cr_wo_cyl_wall_ports()
 
+def test_menu():
+    pylab.plot([5,6,7,8],[7,3,8,3])
+    pylab.show()
 
 choice = ''
 while choice.strip() != 'x':
@@ -2864,7 +2917,8 @@ while choice.strip() != 'x':
             's'  : specific_energy_menu,
             't'  : temperature_menu,
             'v'  : velocity_menu,
-            'w'  : volume_menu
+            'w'  : volume_menu,
+            'z'  : test_menu
             }
     print('\nMenu')
     print(' 1. Calculate Displacement')
@@ -2899,6 +2953,7 @@ while choice.strip() != 'x':
     print(' v. Convert Velocity')
     print(' w. Convert Volume')
     print(' x. Exit')
+    print(' z. Test Something')
     choice = selection()
     if choice in dispatch:
         dispatch[choice]()
