@@ -1071,10 +1071,13 @@ def list_bore_strokes():
     print('56 272 Yblk bore - ',str(round(inches_to_mm(3.62),1)),', stroke ',
                                 str(round(inches_to_mm(3.30),1)),', cyl 8, b/s',
                                 str(round(3.62/3.30,2)))
-    print('87 Must 5.0 bore - 101.6 , stroke  76.2 , cyl 8, b/s', str(round(101.6/76.2,2)))
-    print('04 Must 4.6 bore -  90.2 , stroke  90.0 , cyl 8, b/s', str(round(90.2/90.0,2)))
     print('77 Cad  425 bore - 103.7 , stroke 103.0 , cyl 8, b/s', str(round(103.7/103.0,2)))
+    print('87 Must 5.0 bore - 101.6 , stroke  76.2 , cyl 8, b/s', str(round(101.6/76.2,2)))
     print('95 Probe2.5 bore -  84.5 , stroke  74.2 , cyl 6, b/s', str(round(84.5/74.2,2)))
+    print('04 MC SC3.8 bore - ',str(round(inches_to_mm(3.8),1)),', stroke ',
+                                str(round(inches_to_mm(3.44),1)),', cyl 6, b/s',
+                                str(round(3.8/3.44,2)))
+    print('04 Must 4.6 bore -  90.2 , stroke  90.0 , cyl 8, b/s', str(round(90.2/90.0,2)))
     print('16 Ford 5.2 bore -  94.0 , stroke  93.0 , cyl 8, b/s', str(round(94.0/93.0,2)))
     print('18 Ford 5.0 bore -  93.0 , stroke  92.7 , cyl 8, b/s', str(round(93.0/92.7,2)))
 
@@ -1094,6 +1097,7 @@ def list_connecting_rod_lengths():
     print('56 272 Yblk       - ', str(round(inches_to_mm(6.324),1)), 'mm')
     print('87 Must 5.0       - 129.286 mm, 5.090 in')
     print('04 Must 4.6       - 150.7 mm')
+    print('04 Monte Carlo SC - 143.0 mm')
     print('16 Ford 5.2 Voodo - 150.7 mm')
 
 # http://www.ridermagazine.com/manufacturer/honda/retrospective-honda-ncna50-express-1977-1983.htm/
@@ -1129,11 +1133,12 @@ def list_peak_hp_rpms():
     print('06 SXR 800 Stock  HP  80.0 @6250')
     print('ZXI 1100 Stock    HP 120.0 @6750')
     print('ZXI 1100 dry pipe HP 150.0 @8000')
+    print('77 Cad  425       HP 185.0 @4000')
     print('87 Must 5.0       HP 220.0 @4200')
+    print('95 Probe GT 2.5l  HP 164.0 @5600')
+    print('04 Monte SC Stock HP 190.0 @5200')
     print('04 Must 4.6 Stock HP 213.0 @4400')
     print('04 Must 4.6 Tuned HP 252.0 @5250')
-    print('77 Cad  425       HP 185.0 @4000')
-    print('95 Probe GT 2.5l  HP 164.0 @5600')
     print('16 Ford Voodo 5.2 HP 526.0 @7500')
     print('18 Ford Coyete5.0 HP 460.0 @7000')
 
@@ -1147,6 +1152,7 @@ def list_coefficient_of_drag():
 # http://www.zeperfs.com/en/fiche767-ford-probe-2-5-24v.htm
 def list_peak_torque():
     print('87 Must 5.0       300 ft-lbs @3200')
+    print('04 Monte SC Stock 280 ft-lbs @3600')
     print('04 Must 4.6 Stock 285 ft-lbs @3500')
     print('04 Must 4.5 Tuned 293 ft-lbs @4300')
     print('95 Probe GT 2.5l  156 ft-lbs @4800')
@@ -1185,9 +1191,10 @@ def list_compression_ratios():
     print('06 SXR 800 Stock  - 7.2')
     print('ZXI 1100 stock    - 5.8')
     print('57 272 Yblk       - 7.8')
-    print('87 Must 5.0       - 9.0')
-    print('04 Must GT 4.6L   - 9.4')
     print('77 Cad  425       - 8.2')
+    print('87 Must 5.0       - 9.0')
+    print('04 Monte SC 3800  - 8.5')
+    print('04 Must GT 4.6L   - 9.4')
     print('95 Probe GT 2.5l  - 9.2')
     print('16 Ford Voodo 5.2 - 12.0')
     print('18 Ford Coyote5.0 - 12.0')
