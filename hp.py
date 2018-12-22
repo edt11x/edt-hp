@@ -34,6 +34,12 @@ for libname in libnames:
 try: input = raw_input
 except NameError: pass
 
+# Units
+# temperature - I want internal variables to hold temperatures in celsius, C
+# pressure    - I want internal variables to hold pressure in kilo pascals, kPa
+# distance    - I want internal variables to hold distance in millimeters, mm
+# area        - I want internal variables to hold area in millimeters squared, mm^2
+
 #
 # Next Steps
 # * Compute HP loss or gain based on Barometric Pressure and Temperature
@@ -87,6 +93,9 @@ PERCENT_DIVISOR = 100
 
 def decimal_to_percent(decimal):
     return decimal * PERCENT_DIVISOR
+
+def percent_to_decimal(percent):
+    return percent / PERCENT_DIVISOR
 
 # Gravity
 
@@ -599,7 +608,7 @@ def watts_to_imperial_hp(watts):
 def kilowatts_to_imperial_hp(kilowatts):
     return kg_m_per_sec_to_imperial_hp(kilowatts_to_kg_m_per_sec(kilowatts))
 def hp_to_hp_uk(hp):
-    return hp / 746.0 * 745.7
+    return (hp / 746.0) * 745.7
 # DIN 66036 defines one metric horsepower as the power to
 # raise a mass of 75 kg against the earth's gravitational
 # force over a distance of one metre in one second; this is
@@ -853,6 +862,9 @@ def calc_estimate_scavange_ratio(cr):
 # (compression_ratio - 1) / compression_ratio
     return (cr_guard(cr) - 1) / cr_guard(cr)
 
+#
+# Thermodynamics
+#
 def calc_heat_added_per_unit_mass_gas(btuslb,stoich,scarat):
     return btuslb * scarat / stoich
 
@@ -864,6 +876,40 @@ def calc_thermal_efficiency(cr, k):
 # cr - compression ratio
 # k  - is the adiabatic constant, Cp/Cv, sometimes represented by greek gamma
     return 1 - math.pow((1/cr_guard(cr)),(k-1))
+
+def calc_pressure_ratio(intake_pressure, boost_pressure_added):
+    return (intake_pressure + boost_pressure_added) / too_small_guard(intake_pressure)
+
+# XXX XXX XXX XXX XXX XXX XXX XXX XXX
+# From Wikipedia
+# https://en.wikipedia.org/wiki/Adiabatic_process
+# https://en.wikipedia.org/wiki/Isentropic_process
+#
+# t2 = t1 * (p2/p1) ^ ((k-1)/k)
+#
+# which is actually:
+#
+# https://en.wikipedia.org/wiki/Isentropic_process
+# (t2/t1) ^ (1/k-1) == (p2/p1) ^ (1/k) == V1/V2
+#
+# t2 - the resulting temperature
+# t1 - the starting absolute temperature
+# p2 - the ending pressure
+# p1 - the starting temperature
+# k - is the adiabatic constant, Cp/Cv, someeitmes represented by greek gamma
+#
+# we will take temperature in celsius and return temperature in celsius
+#
+def calc_isentropic_temperature(t1, k, p1, p2):
+    t2 = kelvin_to_celsius(celsius_to_kelvin(t1) * math.pow((p2/too_small_guard(p1)), (k-1)/too_small_guard(k)))
+    return t2
+
+# Boost temperature is the calculated isentropic temperature / compressor efficiency
+# Super charger or turbo charger efficiency can be 63% to 75% efficient
+def calc_boost_temperature(t1, k, p1, p2, compressor_eff):
+    t2 = calc_isentropic_temperature(t1, k, p1, p2) / compressor_eff
+    return t2
+# XXX XXX XXX XXX XXX XXX XXX XXX XXX
 
 def calc_a(qpri, cv, inTempC):
     a = qpri / too_small_guard(cv * celsius_to_rankine(inTempC))
@@ -1739,6 +1785,14 @@ def ask_baro_pressure():
     display_pressure('',presskPa)
     return presskPa
 
+def ask_comp_efficiency():
+    print('Enter the compressor efficiency in percent')
+    print('Roots blowers tend to be 40 to 50 % efficient')
+    print('Centrifical blowers tend to be 70 to 85 % efficient')
+    comp_efficiency = prompt('Enter compressor efficiency [%s]', 70)
+    # convert from percent to decimal 70% to 0.70
+    return percent_to_decimal(comp_efficiency)
+
 def ask_length(title, default):
     length = prompt(title + ' in mm [%s]', default)
     display_distance(title, length)
@@ -2058,20 +2112,25 @@ def prompt_air_cycle():
 # *** First ***
 # Things we can know without bore, stroke, displacement, cycles, etc.
 # ie Thermodynamics Intrinsic calculations
+    cp       = ask_cp()
+    cv       = ask_cv()
+    k        = ask_adiabatic_ratio(cp, cv)
     presskPa = ask_baro_pressure()
-    boostkPa = ask_boost()
-    presskPa += boostkPa
-    display_pressure('Total Boost', presskPa)
     inTempC  = ask_air_temperature('Intake Air Temperature', 100)
+    boostkPa = ask_boost()
+    if (boostkPa > 0):
+        comp_efficiency = ask_comp_efficiency()
+        display_pressure('Total Boost', presskPa + boostkPa)
+        display_ratio('Pressure Ratio', (presskPa + boostkPa) / too_small_guard( presskPa))
+        inTempC = calc_boost_temperature(inTempC, k, presskPa, presskPa + boostkPa, comp_efficiency)
+        display_temperature('Post Boost Temperature', inTempC)
+        presskPa += boostkPa
     cr       = ask_compression_ratio()
     btuslb   = ask_fuel_specific_energy_btus_per_lb()
     stoich   = ask_fuel_air_ratio()
     voleff   = ask_volumetric_eff()
     scarat   = ask_scavange_ratio(cr)
     qpri     = ask_heat_added_per_unit_mass_gas(btuslb,stoich,scarat) * voleff
-    cp       = ask_cp()
-    cv       = ask_cv()
-    k        = ask_adiabatic_ratio(cp, cv)
     thermeff = calc_thermal_efficiency(cr, k)
     display_thermal_efficiency('Thermal Efficiency', thermeff)
     a        = calc_a(qpri, cv, inTempC)
