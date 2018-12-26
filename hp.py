@@ -860,6 +860,11 @@ def calc_rpm_from_mean_piston_speed(stroke, mps):
 def calc_estimate_scavange_ratio(cr):
 # A guess at the scavange ratio is
 # (compression_ratio - 1) / compression_ratio
+# The idea is the area left over at top dead
+# center is not scavanged. Efficient engines
+# with headers, should scavanage better, 
+# engines with back pressure or samll exhaust
+# valves or ports could be worse.
     return (cr_guard(cr) - 1) / cr_guard(cr)
 
 #
@@ -880,7 +885,6 @@ def calc_thermal_efficiency(cr, k):
 def calc_pressure_ratio(intake_pressure, boost_pressure_added):
     return (intake_pressure + boost_pressure_added) / too_small_guard(intake_pressure)
 
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX
 # From Wikipedia
 # https://en.wikipedia.org/wiki/Adiabatic_process
 # https://en.wikipedia.org/wiki/Isentropic_process
@@ -909,7 +913,6 @@ def calc_isentropic_temperature(t1, k, p1, p2):
 def calc_boost_temperature(t1, k, p1, p2, compressor_eff):
     t2 = calc_isentropic_temperature(t1, k, p1, p2) / compressor_eff
     return t2
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX
 
 def calc_a(qpri, cv, inTempC):
     a = qpri / too_small_guard(cv * celsius_to_rankine(inTempC))
@@ -1723,7 +1726,7 @@ def selection():
 def ask_specific_heat_ratio(k=1.343):
     print('Ratio of Specific Heats')
     list_specific_heat_ratios()
-    k = prompt('Computed Adiabatic Ratio[%s]', k)
+    k = prompt('Computed Adiabatic Ratio or Constant[%s]', k)
     print('')
     return k
 
@@ -2011,7 +2014,9 @@ def ask_cv():
     cv = prompt('Cv(Specific Heat at Constant Volume) Btu/lbm F [%s] ', 0.1715)
     return cv
 
-def ask_adiabatic_ratio(cp, cv):
+def ask_adiabatic_ratio():
+    cp = ask_cp()
+    cv = ask_cv()
     k = calc_adiabatic_ratio(cp, cv)
 # let the user modify it, if so desired.
     k = ask_specific_heat_ratio(k)
@@ -2112,12 +2117,11 @@ def prompt_air_cycle():
 # *** First ***
 # Things we can know without bore, stroke, displacement, cycles, etc.
 # ie Thermodynamics Intrinsic calculations
-    cp       = ask_cp()
-    cv       = ask_cv()
-    k        = ask_adiabatic_ratio(cp, cv)
+    k        = ask_adiabatic_ratio()
     presskPa = ask_baro_pressure()
     inTempC  = ask_air_temperature('Intake Air Temperature', 100)
     boostkPa = ask_boost()
+# if we have a supercharger or turbocharger
     if (boostkPa > 0):
         comp_efficiency = ask_comp_efficiency()
         display_pressure('Total Boost', presskPa + boostkPa)
@@ -2313,9 +2317,7 @@ def prompt_carb_mass_flow():
     Cd              = estimate_Cd(AT, Aref)
     print('\nEstimate of Coefficient of Discharge : ', Cd, '\n')
     presskPa        = ask_baro_pressure()
-    cp              = ask_cp()
-    cv              = ask_cv()
-    k               = ask_adiabatic_ratio(cp, cv)
+    k               = ask_adiabatic_ratio()
     inTempC         = ask_air_temperature('Intake Air Temperature', 100)
     pT              = choked_throat_pressure(presskPa, k)
     display_pressure('\nChoked Throat Pressure', pT)
@@ -2438,7 +2440,7 @@ def prompt_tuned_length():
 def prompt_speed_sound():
     list_speed_of_sound()
     print('Speed of Sound in an Ideal Gas')
-    k = ask_specific_heat_ratio()
+    k = ask_adiabatic_ratio()
     T = prompt('Temperature of Gas degC [%s]', 100)
     print('28.95 - Dry Air')
     print('29.00 - Exhaust')
