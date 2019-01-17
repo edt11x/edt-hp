@@ -812,7 +812,7 @@ def calc_tuned_rpm(epo_deg_ATDC, ws, tl):
     # rpm - Revolutions Per Minute
     eo = calc_epo_duration_deg(epo_deg_ATDC)
     ws = ws * 1000 / (12 * 25.4)
-    rpm = eo * ws * 25.4 / tl
+    rpm = inches_to_mm(eo * ws) / tl
     return rpm
 
 def calc_tuned_length(epo_deg_ATDC, ws, rpm):
@@ -824,7 +824,7 @@ def calc_tuned_length(epo_deg_ATDC, ws, rpm):
     # rpm - Revolutions Per Minute
     eo = calc_epo_duration_deg(epo_deg_ATDC)
     ws = ws * 1000 / (12 * 25.4)
-    tl = eo * ws * 25.4 / rpm
+    tl = inches_to_mm(eo * ws) / rpm
     return tl
 
 # http://hyperphysics.phy-astr.gsu.edu/hbase/sound/souspe3.html#c1
@@ -2021,7 +2021,7 @@ def ask_adiabatic_ratio():
 # let the user modify it, if so desired.
     k = ask_specific_heat_ratio(k)
     print('')
-    return k
+    return cp, cv, k
 
 def ask_moped_rim_size():
     list_moped_rim_sizes()
@@ -2117,10 +2117,10 @@ def prompt_air_cycle():
 # *** First ***
 # Things we can know without bore, stroke, displacement, cycles, etc.
 # ie Thermodynamics Intrinsic calculations
-    k        = ask_adiabatic_ratio()
-    presskPa = ask_baro_pressure()
-    inTempC  = ask_air_temperature('Intake Air Temperature', 100)
-    boostkPa = ask_boost()
+    cp, cv, k = ask_adiabatic_ratio()
+    presskPa  = ask_baro_pressure()
+    inTempC   = ask_air_temperature('Intake Air Temperature', 100)
+    boostkPa  = ask_boost()
 # if we have a supercharger or turbocharger
     if (boostkPa > 0):
         comp_efficiency = ask_comp_efficiency()
@@ -2317,7 +2317,7 @@ def prompt_carb_mass_flow():
     Cd              = estimate_Cd(AT, Aref)
     print('\nEstimate of Coefficient of Discharge : ', Cd, '\n')
     presskPa        = ask_baro_pressure()
-    k               = ask_adiabatic_ratio()
+    cp, cv, k       = ask_adiabatic_ratio()
     inTempC         = ask_air_temperature('Intake Air Temperature', 100)
     pT              = choked_throat_pressure(presskPa, k)
     display_pressure('\nChoked Throat Pressure', pT)
@@ -2440,7 +2440,7 @@ def prompt_tuned_length():
 def prompt_speed_sound():
     list_speed_of_sound()
     print('Speed of Sound in an Ideal Gas')
-    k = ask_adiabatic_ratio()
+    cp, cv, k = ask_adiabatic_ratio()
     T = prompt('Temperature of Gas degC [%s]', 100)
     print('28.95 - Dry Air')
     print('29.00 - Exhaust')
