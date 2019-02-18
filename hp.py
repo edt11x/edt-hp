@@ -35,10 +35,11 @@ try: input = raw_input
 except NameError: pass
 
 # Units
-# temperature - I want internal variables to hold temperatures in celsius, C
-# pressure    - I want internal variables to hold pressure in kilo pascals, kPa
-# distance    - I want internal variables to hold distance in millimeters, mm
-# area        - I want internal variables to hold area in millimeters squared, mm^2
+# temperature      - I want internal variables to hold temperatures in celsius, C
+# pressure         - I want internal variables to hold pressure in kilo pascals, kPa
+# distance         - I want internal variables to hold distance in millimeters, mm
+# area             - I want internal variables to hold area in millimeters squared, mm^2
+# angular velocity - I want internal variables to hold angular velocity in RPM
 
 #
 # Next Steps
@@ -77,8 +78,8 @@ def too_small_guard(val):
         val = 1.0e-9
     return val
 
-# Compression ratio should not be less than one in any normal circumstance I can
-# think of.
+# Compression ratio should not be less than one in any normal circumstance I
+# can think of.
 def cr_guard(cr):
     if (cr < 1.0):
         cr = 1.0
@@ -166,6 +167,7 @@ def per_kg_to_per_lb(per_kg):
 # Force
 # 
 # Force = Mass * Acceleration
+#
 # 1 Newton = 1 kg * meters/(second^2)
 def newtons_to_kg(newtons):
     return newtons / STANDARD_GRAVITY
@@ -467,26 +469,29 @@ def bar_to_kPa(bar):
 
 # Work, Energy or Torque
 #
-# Energy is the capacity for doing work.  You must have
-# energy to accomplish work - it is like the "currency" for
-# performing work.  To do 100 joules of work, you must
-# expend 100 joules of energy.
+# Energy is the capacity for doing work.  You must have energy to accomplish
+# work - it is like the "currency" for performing work.  To do 100 joules of
+# work, you must expend 100 joules of energy.
 #
-# Work refers to an activity involving a force and movement
-# in the directon of the force. A force of 20 newtons
-# pushing an object 5 meters in the direction of the force
-# does 100 joules of work.
+# Work refers to an activity involving a force and movement in the directon of
+# the force. A force of 20 newtons pushing an object 5 meters in the direction
+# of the force does 100 joules of work.
 #
-# The rate of doing work is equal to the rate of using
-# energy since the a force transfers one unit of energy when
-# it does one unit of work. A horsepower is equal to 550 ft
-# lb/s, and a kilowatt is 1000 watts.
+# Work = Force * Distance
+#
+# remember
+#
+# Force = Mass * Acceleration
+#
+# The rate of doing work is equal to the rate of using energy since the a force
+# transfers one unit of energy when it does one unit of work. A horsepower is
+# equal to 550 ft lb/s, and a kilowatt is 1000 watts.
 #
 # The British thermal unit (BTU or Btu) is a traditional unit of work equal to
 # about 1055 joules.  A BTU is the amount of heat required to rasie the
 # temperature of 1 avoirdupois bound of liquid water by 1 degree Fahrenheit at
-# a constant pressure of 1 atmosphere.
-# ISO Standard Definition of BTU 1055.056 joules, but this is an approximation
+# a constant pressure of 1 atmosphere.  ISO Standard Definition of BTU 1055.056
+# joules, but this is an approximation:
 # https://en.wikipedia.org/wiki/British_thermal_unit
 JOULES_PER_BTU = 1055.056
 JOULES_PER_CALORIE = 4.184
@@ -537,10 +542,15 @@ def ft_lbs_to_calories(ft_lbs_force):
 
 # Power
 #
-# Power is the rate of doing work or the rate of using
-# energy, which are numerically the same. If you do 100
-# joules of work in one second (using 100 joules of energy),
-# the power is 100 watts.
+# Power is the rate of doing work or the rate of using energy, which are
+# numerically the same. If you do 100 joules of work in one second (using 100
+# joules of energy), the power is 100 watts.
+#
+# Power = Work / time
+#
+# or
+#
+# Power = Force * velocity
 #
 HP_TO_FT_LBS_PER_SEC = 550
 HP_TO_FT_LBS_PER_MIN = HP_TO_FT_LBS_PER_SEC * SEC_PER_MIN
@@ -574,10 +584,9 @@ def kg_m_per_sec_to_imperial_hp(kg_m_per_sec):
 # Mechanical horsepower
 # https://en.wikipedia.org/wiki/Horsepower#Metric_horsepower_.28PS.2C_cv.2C_hk.2C_pk.2C_ks.2C_ch.29
 #
-# Assuming the third CGPM (1901, CR 70) definition of
-# standard gravity, gn=9.80665 m/s^2, is used to define the
-# pound-force as well as the kilogram force, and the
-# international avoirdupois pound (1959), one mechanical
+# Assuming the third CGPM (1901, CR 70) definition of standard gravity,
+# gn=9.80665 m/s^2, is used to define the pound-force as well as the kilogram
+# force, and the international avoirdupois pound (1959), one mechanical
 # horsepower is:
 #
 # 1 hp = 33,000 ft-lbf/min by definition
@@ -715,8 +724,10 @@ def calc_geom_chord_from_arc_length(arc_length, radius):
 #
 
 # duration is the time to the bottom and then back up
+# Calculate the Exhaust Port Open Duration
 def calc_epo_duration_rad(epo_rad_ATDC):
     return 2 * atdc_to_bbdc_rad(epo_rad_ATDC)
+
 def calc_epo_duration_deg(epo_deg_ATDC):
     return 2 * atdc_to_bbdc_deg(epo_deg_ATDC)
 
@@ -910,6 +921,7 @@ def calc_isentropic_temperature(t1, k, p1, p2):
 
 # Boost temperature is the calculated isentropic temperature / compressor efficiency
 # Super charger or turbo charger efficiency can be 63% to 75% efficient
+# Roots style blowers (GMC 671) can be much less efficient, 43%.
 def calc_boost_temperature(t1, k, p1, p2, compressor_eff):
     t2 = calc_isentropic_temperature(t1, k, p1, p2) / compressor_eff
     return t2
@@ -1176,6 +1188,7 @@ def list_connecting_rod_lengths():
 # http://www.edmunds.com/ford/mustang/2004/st-100299264/features-specs/
 #
 def list_peak_hp_rpms():
+    print('NC50 stock rated  HP   2.5 @7000')
     print('NC50 stock        HP   4.5 @7000')
     print('NC50 shocko       HP   9.0 @8800')
     print('TRX250R           HP  42.0 @7500')
@@ -1523,7 +1536,7 @@ def list_specific_heat_ratios():
     print('1.235 - Ratio Specific Heats CO2        400C')
     print('1.195 - Ratio Specific Heats CO2       1000C')
     print('1.320 - Ratio Specific Heats CH4 Methane 20C')
-    print('1.343 - Ratio Specific Heats Exhaust')
+    print('1.343 - Ratio Specific Heats Gasoline Exhaust')
 
 # From Wikipedia Speed of Sound article
 def list_speed_of_sound():
