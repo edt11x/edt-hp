@@ -491,7 +491,8 @@ def bar_to_kPa(bar):
 # about 1055 joules.  A BTU is the amount of heat required to rasie the
 # temperature of 1 avoirdupois bound of liquid water by 1 degree Fahrenheit at
 # a constant pressure of 1 atmosphere.  ISO Standard Definition of BTU 1055.056
-# joules, but this is an approximation:
+# joules, but this is an approximation and different measurements are used in
+# different contexts:
 # https://en.wikipedia.org/wiki/British_thermal_unit
 JOULES_PER_BTU = 1055.056
 JOULES_PER_CALORIE = 4.184
@@ -3024,7 +3025,7 @@ while choice.strip() != 'x':
     print(' b. Convert BMEP')
     print(' d. Convert Distance')
     print(' e. Convert Energy (Torque)')
-    print(' h. Convert Horsepower')
+    print(' h. Convert Horsepower (Power)')
     print(' i. Ideal Gas')
     print(' l. Convert Liquid Capacity')
     print(' m. Convert Mass')
