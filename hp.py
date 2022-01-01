@@ -1426,13 +1426,14 @@ def list_volumetric_efficiency():
     print('1.5 and 3.0. If you do not know this value for your')
     print('turbo, it is best to use 3.0')
     print('')
-    print('Stock Engines     = 0.75 - 0.85')
-    print('Mild Built        = 0.85 - 0.90')
-    print('Racing Engines    = 0.90 - 1.00')
-    print('2Stroke Good Pipe = 1.00')
-    print('2Stroke OK   Pipe = 0.90')
-    print('1950s or 1960s cars 0.85')
-    print('1980s or 1990s cars 0.90')
+    print('60s-80s Stock Engines = 0.75 - 0.85')
+    print('Modern  Stock Engines = 0.85 - 0.95')
+    print('Mild Built            = 0.85 - 0.90')
+    print('Racing Engines        = 0.90 - 1.00')
+    print('2Stroke Good Pipe     = 1.00')
+    print('2Stroke OK   Pipe     = 0.90')
+    print('1950s or 1960s cars   = 0.85')
+    print('1980s or 1990s cars   = 0.90')
     print('Well designed normal aspirated engines 1.0')
 
 def list_clearance_volume():
@@ -1442,6 +1443,12 @@ def list_clearance_volume():
 
 # https://en.wikipedia.org/wiki/Mean_effective_pressure
 # http://www.zeperfs.com/en/fiche767-ford-probe-2-5-24v.htm
+# This is not the peak pressure, the peak pressure or the
+# pressure at combustion is much higher. This is the mean
+# or for me it is easier to think of as the average,
+# pressure across the whole stroke. So at combustion the
+# pressure is very high, at the bottom of the stroke it
+# is very low and we find the average of that pressure.
 def list_bmep():
     print('Typical Mean Effective Pressure at max Torque')
     print('Natural asp. spark-ign : 8.5-10.5 bar 850-1050kPa 125-150 psi')
