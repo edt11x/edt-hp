@@ -534,8 +534,12 @@ def newton_m_to_ft_lbs(newton_meters):
 # newton-meters and joules are dimensionally equivalent
 def ft_lbs_to_joules(ft_lbs_force):
     return ft_lbs_to_newton_m(ft_lbs_force)
+def joules_to_ft_lbs(joules):
+    return newton_m_to_ft_lbs(joules)
 def ft_lbs_to_btus(ft_lbs_force):
-    return ft_lbs_to_joules(ft_lbs_force) / JOULES_PER_BTU
+    return joules_to_btus(ft_lbs_to_joules(ft_lbs_force))
+def btus_to_ft_lbs(btus):
+    return joules_to_ft_lbs(btus_to_joules(btus))
 # Thermochemical calorie is defined as 4.184 joules
 # https://en.wikipedia.org/wiki/Calorie
 def ft_lbs_to_calories(ft_lbs_force):
@@ -568,6 +572,10 @@ def ft_lbs_per_sec_to_imperial_hp(ftLbsPerSec):
     return ftLbsPerSec / HP_TO_FT_LBS_PER_SEC
 def ft_lbs_per_min_to_imperial_hp(ftLbsPerMin):
     return ft_lbs_per_sec_to_imperial_hp(per_min_to_per_sec(ftLbsPerMin))
+def ft_lbs_per_hour_to_imperial_hp(ftLbsPerHour):
+    return ft_lbs_per_sec_to_imperial_hp(per_hour_to_per_sec(ftLbsPerMin))
+def btus_per_hour_to_imperial_hp(btusPerHour):
+    return ft_lbs_per_sec_to_imperial_hp(btus_to_ft_lbs(per_hour_to_per_sec(btusPerHour)))
 # Imperial Horsepower is defined as exactly 550 ft-lbs/second
 def imperial_hp_to_ft_lbs_per_sec(hp):
     return hp * HP_TO_FT_LBS_PER_SEC
@@ -1611,6 +1619,7 @@ def display_angular_velocity(title, rpm):
     print('Degrees per Second     : ', rpm_to_deg_per_sec(rpm))
     print('')
 
+# Quite often people talk about BTUs, they really are saying BTUs/hour
 def display_hp(title, hp):
     print(title)
     print('HP US or Imperial      : ', hp)
@@ -1618,9 +1627,9 @@ def display_hp(title, hp):
     print('HP (UK)                : ', hp_to_hp_uk(hp))
     print('Watts                  : ', imperial_hp_to_watts(hp))
     print('Kilo Watts             : ', imperial_hp_to_kilowatts(hp))
-    print('BTUs      per Second   : ', imperial_hp_to_btus_per_sec(hp))
-    print('BTUs      per Minute   : ', imperial_hp_to_btus_per_minute(hp))
-    print('BTUs      per Hour     : ', imperial_hp_to_btus_per_hour(hp))
+    print('BTUs per Second        : ', imperial_hp_to_btus_per_sec(hp))
+    print('BTUs per Minute        : ', imperial_hp_to_btus_per_minute(hp))
+    print('BTUs per Hour(aka BTUs): ', imperial_hp_to_btus_per_hour(hp))
     print('Foot-Lbs  per Second   : ', imperial_hp_to_ft_lbs_per_sec(hp))
     print('Foot-Lbs  per Minute   : ', imperial_hp_to_ft_lbs_per_min(hp))
     print('kg-meters per Second   : ', imperial_hp_to_kg_m_per_sec(hp))
@@ -1950,6 +1959,11 @@ def ask_ft_lbs_force():
     print('')
     return ft_lbs_force
 
+def ask_btus():
+    btus = prompt('BTUs [%s]', 45000)
+    print('')
+    return btus
+
 def ask_newton_meters_force():
     list_peak_torque()
     newton_m = prompt('Newtons Meters [%s]', 1)
@@ -1986,6 +2000,11 @@ def ask_kg_m_per_sec():
     kg_m_sec = prompt('KG Meters per Second [%s]', 75)
     print('')
     return kg_m_sec
+
+def ask_btus_per_hour():
+    btus_per_hour = prompt('BTUs per Hour [%s]', 45000)
+    print('')
+    return btus_per_hour
 
 def ask_volumetric_eff():
     list_volumetric_efficiency()
@@ -2472,6 +2491,10 @@ def prompt_ft_lbs_force():
     ft_lbs_force = ask_ft_lbs_force()
     display_energy('Energy', ft_lbs_force)
 
+def prompt_btus():
+    btus = ask_btus()
+    display_energy('Energy', btus_to_ft_lbs(btus))
+
 def prompt_newtons_meters_force():
     newton_meters = ask_newton_meters_force()
     display_energy('Energy', newton_m_to_ft_lbs(newton_meters))
@@ -2513,6 +2536,10 @@ def prompt_kg_m_per_sec():
     kg_m_per_sec = ask_kg_m_per_sec()
     display_hp('Horsepower', kg_m_per_sec_to_imperial_hp(kg_m_per_sec))
 
+def prompt_btus_per_hour():
+    btus_per_hour = ask_btus_per_hour()
+    display_hp('Horsepower', btus_per_hour_to_imperial_hp(btus_per_hour))
+
 def prompt_port_segment():
     bore = ask_bore()
     segment_length = ask_arc_segment_length('Port Segment Length', 20)
@@ -2550,6 +2577,7 @@ def horsepower_menu():
         print('5. Convert Foot Lbs  per Second')
         print('6. Convert Foot Lbs  per Minute')
         print('7. Convert KG Meters per Second')
+        print('8. Convert BTUs per Hour')
         print('x. Exit')
         choice = selection()
         if choice == '1':
@@ -2566,6 +2594,8 @@ def horsepower_menu():
             prompt_ft_lbs_per_min()
         if choice == '7':
             prompt_kg_m_per_sec()
+        if choice == '8':
+            prompt_btus_per_hour()
 
 def ideal_gas_menu():
     choice = ''
@@ -2886,6 +2916,7 @@ def energy_menu():
         print('\nEnergy (Torque) Menu')
         print('1. Convert Ft-Lbs of Force')
         print('2. Convert Newtons/Meters of Force')
+        print('3. Convert BTUs')
         print('x. Exit')
         choice = selection()
         print('')
@@ -2893,6 +2924,8 @@ def energy_menu():
             prompt_ft_lbs_force()
         if choice == '2':
             prompt_newtons_meters_force()
+        if choice == '3':
+            prompt_btus()
 
 def specific_energy_menu():
     choice = ''
