@@ -456,16 +456,26 @@ def kPa_to_psi(kPa):
 # https://en.wikipedia.org/wiki/Atmosphere_(unit)
 def kPa_to_std_atm(kPa):
     return kPa / 101.325
+def std_atm_to_kPa(atm):
+    return atm * 101.325
 # One atmosphere is exactly 760 torr
 # https://en.wikipedia.org/wiki/Atmosphere_(unit)
 def std_atm_to_torr(atm):
     return 760.0 * atm
+def torr_to_std_atm(torr):
+    return torr / 760.0
 def psi_to_kPa(psi):
     return 6.89475729 * psi
 # One Bar is exactly equal to 100,000 Pa
 # https://en.wikipedia.org/wiki/Bar_(unit)
 def bar_to_kPa(bar):
     return bar * 100.0
+# 1 torr is exactly 101,325/760 pascals
+# https://en.wikipedia.org/wiki/Torr
+def kPa_to_torr(kPa):
+    return std_atm_to_torr(kPa_to_std_atm(kPa))
+def torr_to_kPa(torr):
+    return std_atm_to_kPa(torr_to_std_atm(torr))
 
 # Work, Energy or Torque
 #
@@ -1573,12 +1583,13 @@ def display_pressure(title, kPa):
     print(title)
     print('Pounds per Square Inch : ', kPa_to_psi(kPa))
     print('Bar                    : ', kPa_to_bar(kPa))
+    print('Pascals                : ', kPa_to_Pa(kPa))
     print('Kilo Pascals           : ', kPa)
     print('Mega Pascals           : ', kPa_to_MPa(kPa))
     print('Inches of Mercury      : ', kPa_to_inHg(kPa))
     print('Inches of Water        : ', kPa_to_inH2O(kPa))
     print('Standard Atmospheres   : ', kPa_to_std_atm(kPa))
-    print('Torr                   : ', std_atm_to_torr(kPa_to_std_atm(kPa)))
+    print('Torr                   : ', kPa_to_torr(kPa))
     print('')
 
 def display_distance(title, mm):
@@ -2883,6 +2894,8 @@ def pressure_menu():
         print('1. Convert Bar')
         print('2. Convert PSI')
         print('3. Convert kPa')
+        print('4. Convert Pascals')
+        print('5. Convert torr')
         print('x. Exit')
         choice = selection()
         print('')
@@ -2895,6 +2908,12 @@ def pressure_menu():
         if choice == '3':
             kPa = prompt('KiloPascals [%s]', 1.0)
             display_pressure('', kPa)
+        if choice == '4':
+            Pa = prompt('Pascals [%s]', 1000.0)
+            display_pressure('', Pa_to_kPa(Pa))
+        if choice == '5':
+            torr = prompt('Torr [%s]', 1.0)
+            display_pressure('', torr_to_kPa(torr))
 
 def mean_piston_speed_menu():
     choice = ''
