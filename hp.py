@@ -2577,6 +2577,19 @@ def bmep_menu():
         if choice == '4':
             prompt_sv_from_hp_mep_and_rpm()
 
+def fuel_menu():
+    choice = ''
+    while choice.strip() != 'x':
+        print('\nFuel Energy Menu')
+        print('1. Convert BTUs/lb')
+        print('2. Convert MJ/kg')
+        print('x. Exit')
+        choice = selection()
+        if choice == '1':
+            prompt_btus_per_lb_specific_energy()
+        if choice == '2':
+            prompt_MJ_per_kg_specific_energy()
+
 def horsepower_menu():
     choice = ''
     while choice.strip() != 'x':
@@ -3050,6 +3063,7 @@ while choice.strip() != 'x':
             'b'  : bmep_menu,
             'd'  : distance_menu,
             'e'  : energy_menu,
+            'f'  : fuel_menu,
             'h'  : horsepower_menu,
             'i'  : ideal_gas_menu,
             'l'  : liquid_capacity_menu,
@@ -3084,6 +3098,7 @@ while choice.strip() != 'x':
     print(' b. Convert BMEP')
     print(' d. Convert Distance')
     print(' e. Convert Energy (Torque)')
+    print(' f. Convert Fuel energy')
     print(' h. Convert Horsepower (Power)')
     print(' i. Ideal Gas')
     print(' l. Convert Liquid Capacity')
