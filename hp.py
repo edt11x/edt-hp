@@ -919,7 +919,7 @@ def calc_pressure_ratio(intake_pressure, boost_pressure_added):
 # t2 - the resulting temperature
 # t1 - the starting absolute temperature
 # p2 - the ending pressure
-# p1 - the starting temperature
+# p1 - the starting pressure
 # k - is the adiabatic constant, Cp/Cv, someeitmes represented by greek gamma
 #
 # we will take temperature in celsius and return temperature in celsius
@@ -1619,14 +1619,15 @@ def display_angular_velocity(title, rpm):
     print('Degrees per Second     : ', rpm_to_deg_per_sec(rpm))
     print('')
 
-# Quite often people talk about BTUs, they really are saying BTUs/hour
+# Quite often people talk about BTUs, they really are saying BTUs/hour,
+# the heat energy generated per hour
 def display_hp(title, hp):
     print(title)
     print('HP US or Imperial      : ', hp)
     print('HP metric (aka PS)     : ', imperial_hp_to_metric_hp(hp))
     print('HP (UK)                : ', hp_to_hp_uk(hp))
-    print('Watts                  : ', imperial_hp_to_watts(hp))
-    print('Kilo Watts             : ', imperial_hp_to_kilowatts(hp))
+    print('Watts                  : ', round(imperial_hp_to_watts(hp), 6))
+    print('Kilo Watts             : ', round(imperial_hp_to_kilowatts(hp), 6))
     print('BTUs per Second        : ', imperial_hp_to_btus_per_sec(hp))
     print('BTUs per Minute        : ', imperial_hp_to_btus_per_minute(hp))
     print('BTUs per Hour(aka BTUs): ', imperial_hp_to_btus_per_hour(hp))
@@ -2152,6 +2153,7 @@ def display_cylinder_pressures_and_temperatures(p1kPa, t1C, qpri, cr, cv, k):
 
 def prompt_air_cycle():
     print('\nCharles Fayette Taylor Air Cycle Computation of HP\n')
+    print('An Air Cycle is a cyclic process in which the medium is perfect gas.\n')
     print('First we can calculate Mean Effective Pressure independent')
     print('of the geometry, just from thermodynamics\n')
 # *** First ***
@@ -2306,8 +2308,10 @@ def prompt_scooter_mph_from_hp():
     # Force Required = (.015 x 250 lbs) + (.77 x 4 x 1600)/(391) = 16.35
     # I think the unit for force is pounds.
     # Pick say an arbitrary wheel size of 1 ft, then the torque required would be 16.35 ft lbs. Given 40 mph, it will need to spin at 560.5 rpm.
-    # Following is from http://en.wikipedia.org/wiki/Torque :
+    # 
+    # Following is from https://en.wikipedia.org/wiki/Torque :
     # Power (hp) = (torque (lbf x ft) x angular speed (rpm))/5252 = 1.745 hp or 1301.97 watts.
+    # HP = Torque * RPM / 5252 is the standard car horsepower calculation
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
     # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
