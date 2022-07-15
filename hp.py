@@ -497,6 +497,10 @@ def torr_to_kPa(torr):
 # transfers one unit of energy when it does one unit of work. A horsepower is
 # equal to 550 ft lb/s, and a kilowatt is 1000 watts.
 #
+# And Enthalpy should also be mentioned
+#
+# Enthalpy = Internal Energy + (Pressure * Volume)
+#
 # The British thermal unit (BTU or Btu) is a traditional unit of work equal to
 # about 1055 joules.  A BTU is the amount of heat required to rasie the
 # temperature of 1 avoirdupois bound of liquid water by 1 degree Fahrenheit at
