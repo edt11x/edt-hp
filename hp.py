@@ -35,11 +35,16 @@ try: input = raw_input
 except NameError: pass
 
 # Units
-# temperature      - I want internal variables to hold temperatures in celsius, C
+# mass             - I want internal variables to hold mass in kilograms, kg (SI units)
+# temperature      - I want internal variables to hold temperatures in Kelvin, K (SI units)
 # pressure         - I want internal variables to hold pressure in kilo pascals, kPa
 # distance         - I want internal variables to hold distance in millimeters, mm
 # area             - I want internal variables to hold area in millimeters squared, mm^2
 # angular velocity - I want internal variables to hold angular velocity in RPM
+# current          - I want internal variables to hold current in amps (SI units)
+# time             - I want internal variables to hold time in seconds (SI units)
+# mole             - I want internal variables to hold the ammount of a substance in moles, mol (SI units)
+# candela          - I want internal variables to hold the luminosity in candela, cd (SI units)
 
 #
 # Next Steps
@@ -127,20 +132,26 @@ def celsius_to_fahrenheit(temp):
     return ((temp*CELSIUS_TO_FAHREN_RATIO) + FAHRENHEIT_OFFSET)
 def fahrenheit_to_celsius(temp):
     return ((temp - FAHRENHEIT_OFFSET) / CELSIUS_TO_FAHREN_RATIO)
-def celsius_to_kelvin(temp):
-    return (temp + KELVIN_OFFSET)
-def kelvin_to_celsius(temp):
-    return temp - KELVIN_OFFSET
-def fahrenheit_to_kelvin(temp):
-    return celsius_to_kelvin(fahrenheit_to_celsius(temp))
 def fahrenheit_to_rankine(temp):
     return temp + RANKINE_OFFSET
-def celsius_to_rankine(temp):
-    return fahrenheit_to_rankine(celsius_to_fahrenheit(temp))
 def rankine_to_fahrenheit(temp):
     return temp - RANKINE_OFFSET
+def celsius_to_kelvin(temp):
+    return (temp + KELVIN_OFFSET)
+def celsius_to_rankine(temp):
+    return fahrenheit_to_rankine(celsius_to_fahrenheit(temp))
+def kelvin_to_celsius(temp):
+    return (temp - KELVIN_OFFSET)
+def kelvin_to_fahrenheit(temp):
+    return celsius_to_fahrenheit(kelvin_to_celsius(temp))
+def kelvin_to_rankine(temp):
+    return celsius_to_rankine(kelvin_to_celsius(temp))
+def fahrenheit_to_kelvin(temp):
+    return celsius_to_kelvin(fahrenheit_to_celsius(temp))
 def rankine_to_celsius(temp):
     return fahrenheit_to_celsius(rankine_to_fahrenheit(temp))
+def rankine_to_kelvin(temp):
+    return celsius_to_kelvin(rankine_to_celsius(temp))
 
 # Mass and Weight
 
@@ -168,6 +179,7 @@ def per_kg_to_per_lb(per_kg):
 # 
 # Force = Mass * Acceleration
 #
+# This is the beauty of the International System of Units (SI)
 # 1 Newton = 1 kg * meters/(second^2)
 def newtons_to_kg(newtons):
     return newtons / STANDARD_GRAVITY
@@ -427,6 +439,7 @@ def km_hour_to_meters_sec(kmh):
 # Pressure
 
 # 1 pascal is 1 Newton per square meter
+# 1 Pa = 1 N/(m^2) Again the beauty of SI units
 # 1 Newton is the force required to accelerate 1 kg 1 meter per sec
 # https://en.wikipedia.org/wiki/Inch_of_water
 # 1 inH2O is defined as 248.84 pascals at 60F
@@ -466,7 +479,7 @@ def torr_to_std_atm(torr):
     return torr / 760.0
 def psi_to_kPa(psi):
     return 6.89475729 * psi
-# One Bar is exactly equal to 100,000 Pa
+# One Bar is exactly equal to 100,000 Pa or 10^5 Pa
 # https://en.wikipedia.org/wiki/Bar_(unit)
 def bar_to_kPa(bar):
     return bar * 100.0
@@ -500,6 +513,11 @@ def torr_to_kPa(torr):
 # And Enthalpy should also be mentioned
 #
 # Enthalpy = Internal Energy + (Pressure * Volume)
+#
+# where
+#
+# Thermal Energy = Mass Flow * Specific Heat * Change in Temperature
+# Internal Energy = Thermal Energy + Kinetic Energy
 #
 # The British thermal unit (BTU or Btu) is a traditional unit of work equal to
 # about 1055 joules.  A BTU is the amount of heat required to rasie the
@@ -936,10 +954,9 @@ def calc_pressure_ratio(intake_pressure, boost_pressure_added):
 # p1 - the starting pressure
 # k - is the adiabatic constant, Cp/Cv, someeitmes represented by greek gamma
 #
-# we will take temperature in celsius and return temperature in celsius
-#
+# we will take temperature in kelvin and return temperature in kelvin
 def calc_isentropic_temperature(t1, k, p1, p2):
-    t2 = kelvin_to_celsius(celsius_to_kelvin(t1) * math.pow((p2/too_small_guard(p1)), (k-1)/too_small_guard(k)))
+    t2 = (t1 * math.pow((p2/too_small_guard(p1)), (k-1)/too_small_guard(k)))
     return t2
 
 # Boost temperature is the calculated isentropic temperature / compressor efficiency
@@ -949,8 +966,8 @@ def calc_boost_temperature(t1, k, p1, p2, compressor_eff):
     t2 = calc_isentropic_temperature(t1, k, p1, p2) / compressor_eff
     return t2
 
-def calc_a(qpri, cv, inTempC):
-    a = qpri / too_small_guard(cv * celsius_to_rankine(inTempC))
+def calc_a(qpri, cv, tempInK):
+    a = qpri / too_small_guard(cv * kelvin_to_rankine(tempInK))
     return a
 
 def calc_mep_over_p1(a, thermeff, k, cr):
@@ -1598,10 +1615,10 @@ def display_pressure(title, kPa):
 
 def display_distance(title, mm):
     print(title)
-    print('Millimeters            : ', mm)
-    print('Centimeters            : ', mm_to_cm(mm))
+    print('Millimeters            : ', round(mm,6))
+    print('Centimeters            : ', round(mm_to_cm(mm),6))
     print('Meters                 : ', mm_to_meters(mm))
-    print('Inches                 : ', mm_to_inches(mm))
+    print('Inches                 : ', round(mm_to_inches(mm),6))
     print('Feet                   : ', mm_to_feet(mm))
     print('Yards                  : ', mm_to_yards(mm))
     print('Kilometers             : ', mm_to_km(mm))
@@ -1610,8 +1627,8 @@ def display_distance(title, mm):
 
 def display_area(title, square_mm):
     print(title)
-    print('Square Millimeters     : ', square_mm)
-    print('Square Centimeters     : ', mm_to_cm(mm_to_cm(square_mm)))
+    print('Square Millimeters     : ', round(square_mm,6))
+    print('Square Centimeters     : ', round(mm_to_cm(mm_to_cm(square_mm)),6))
     print('Square Meters          : ', mm_to_meters(mm_to_meters(square_mm)))
     print('Square Inches          : ', mm_to_inches(mm_to_inches(square_mm)))
     print('Square Feet            : ', mm_to_feet(mm_to_feet(square_mm)))
@@ -1671,16 +1688,16 @@ def display_energy(title, ft_lbs_force):
 
 def display_specific_energy(title, MJ_per_kg):
     print(title)
-    print('Specific Energy MJ/kg  : ', round(MJ_per_kg,2))
-    print('Specific Energy BTUs/lb: ', round(MJ_per_kg_to_btus_per_lb(MJ_per_kg),2))
+    print('Specific Energy MJ/kg  : ', round(MJ_per_kg,6))
+    print('Specific Energy BTUs/lb: ', round(MJ_per_kg_to_btus_per_lb(MJ_per_kg),6))
     print('')
 
-def display_temperature(title, temp):
+def display_temperature(title, tempInK):
     print(title)
-    print('Celsius                : ', temp)
-    print('Kelvin                 : ', celsius_to_kelvin(temp))
-    print('Fahrenheit             : ', celsius_to_fahrenheit(temp))
-    print('Rankine                : ', celsius_to_rankine(temp))
+    print('Kelvin                 : ', round(tempInK,6))
+    print('Celsius                : ', round(kelvin_to_celsius(tempInK),6))
+    print('Fahrenheit             : ', round(kelvin_to_fahrenheit(tempInK),6))
+    print('Rankine                : ', round(kelvin_to_rankine(tempInK),6))
     print('')
 
 def display_volume(title, cc):
@@ -1820,9 +1837,9 @@ def ask_cycles():
     return cycles
 
 def ask_air_temperature(title, default):
-    inTempC = fahrenheit_to_celsius(prompt(title + 'in deg F [%s]', default))
-    display_temperature(title, inTempC)
-    return inTempC
+    tempInK = fahrenheit_to_kelvin(prompt(title + 'in deg F [%s]', default))
+    display_temperature(title, tempInK)
+    return tempInK
 
 def ask_baro_pressure():
     print('Barometric Pressure (check weather app)')
@@ -1952,7 +1969,7 @@ def ask_air_density():
     # R - Specific gas contant for dry air, 287.05 J/(kg * degrees Kelvin)
     # T - Temperature in Kelvin
     p = kPa_to_Pa(ask_baro_pressure())
-    T = celsius_to_kelvin(ask_air_temperature('Outside Air Temperature', 60))
+    T = ask_air_temperature('Outside Air Temperature', 60)
     R = ask_specific_gas_constant()
     rho = p / (R * T)
     return rho
@@ -2146,25 +2163,25 @@ def prompt_sv_from_hp_mep_and_rpm():
     rpm      = ask_rpm()
     sv_from_hp_mep_and_rpm(hp, mep, rpm, cycles)
 
-def display_cylinder_pressures_and_temperatures(p1kPa, t1C, qpri, cr, cv, k):
+def display_cylinder_pressures_and_temperatures(p1kPa, t1K, qpri, cr, cv, k):
     display_pressure('Cylinder Pressure at Intake Close', p1kPa)
-    display_temperature('Mixture Temperature at Intake Close', t1C)
+    display_temperature('Mixture Temperature at Intake Close', t1K)
     p2kPa = p1kPa * math.pow(cr_guard(cr), k)
-    t2C = kelvin_to_celsius(celsius_to_kelvin(t1C)* (p2kPa/(cr_guard(cr)*p1kPa)) )
+    t2K = t1K * (p2kPa/(cr_guard(cr)*p1kPa))
     display_pressure('Cylinder Pressure at Peak Compression', p2kPa)
-    display_temperature('Mixture Temperature at Peak Compression', t2C)
-    t1r = celsius_to_rankine(t1C)
-    t2r = celsius_to_rankine(t2C)
+    display_temperature('Mixture Temperature at Peak Compression', t2K)
+    t1r = kelvin_to_rankine(t1K)
+    t2r = kelvin_to_rankine(t2K)
     t3r = t2r + qpri/cv
     t4r = t1r * (t3r/t2r)
     p3kPa = p2kPa * (t3r/t2r)
     p4kPa = p3kPa * math.pow(1/cr_guard(cr),k)
     display_pressure('Cylinder Pressure at Combustion', p3kPa)
     display_temperature('Cylinder Temperature at Combustion',
-            rankine_to_celsius(t3r))
+            rankine_to_kelvin(t3r))
     display_pressure('Cylinder Pressure at Exhaust', p4kPa)
     display_temperature('Cylinder Temperature at Exhaust',
-            rankine_to_celsius(t4r))
+            rankine_to_kelvin(t4r))
 
 def prompt_air_cycle():
     print('\nCharles Fayette Taylor Air Cycle Computation of HP\n')
@@ -2176,15 +2193,15 @@ def prompt_air_cycle():
 # ie Thermodynamics Intrinsic calculations
     cp, cv, k = ask_adiabatic_ratio()
     presskPa  = ask_baro_pressure()
-    inTempC   = ask_air_temperature('Intake Air Temperature', 100)
+    tempInK   = ask_air_temperature('Intake Air Temperature', 100)
     boostkPa  = ask_boost()
 # if we have a supercharger or turbocharger
     if (boostkPa > 0):
         comp_efficiency = ask_comp_efficiency()
         display_pressure('Total Boost', presskPa + boostkPa)
         display_ratio('Pressure Ratio', (presskPa + boostkPa) / too_small_guard( presskPa))
-        inTempC = calc_boost_temperature(inTempC, k, presskPa, presskPa + boostkPa, comp_efficiency)
-        display_temperature('Post Boost Temperature', inTempC)
+        tempInK = calc_boost_temperature(tempInK, k, presskPa, presskPa + boostkPa, comp_efficiency)
+        display_temperature('Post Boost Temperature', tempInK)
         presskPa += boostkPa
     cr       = ask_compression_ratio()
     btuslb   = ask_fuel_specific_energy_btus_per_lb()
@@ -2194,7 +2211,7 @@ def prompt_air_cycle():
     qpri     = ask_heat_added_per_unit_mass_gas(btuslb,stoich,scarat) * voleff
     thermeff = calc_thermal_efficiency(cr, k)
     display_thermal_efficiency('Thermal Efficiency', thermeff)
-    a        = calc_a(qpri, cv, inTempC)
+    a        = calc_a(qpri, cv, tempInK)
     print("Q' / (T1 * Cv)          : ", a)
     print('')
     mep      = calc_mep(a, thermeff, k, cr, presskPa)
@@ -2202,7 +2219,7 @@ def prompt_air_cycle():
     display_mep('\nCalculated Mean Effective Pressure before efficiency', psi_to_kPa(mep))
     imep     = calc_indicated_mep(mecheff, mep)
     display_mep('\nIndicated  Mean Effective Pressure', psi_to_kPa(imep))
-    display_cylinder_pressures_and_temperatures(presskPa, inTempC, qpri, cr, cv, k)
+    display_cylinder_pressures_and_temperatures(presskPa, tempInK, qpri, cr, cv, k)
 # *** Next ***
 # Things we need bore, stroke, cycles, etc.
 # ie Thermodynamics Extrinsic calculations
@@ -2377,7 +2394,7 @@ def prompt_carb_mass_flow():
     print('\nEstimate of Coefficient of Discharge : ', Cd, '\n')
     presskPa        = ask_baro_pressure()
     cp, cv, k       = ask_adiabatic_ratio()
-    inTempC         = ask_air_temperature('Intake Air Temperature', 100)
+    tempInK         = ask_air_temperature('Intake Air Temperature', 100)
     pT              = choked_throat_pressure(presskPa, k)
     display_pressure('\nChoked Throat Pressure', pT)
     print('\nCritical Pressure Ratio: ', pT / too_small_guard(presskPa))
@@ -2385,7 +2402,7 @@ def prompt_carb_mass_flow():
     AT              = mm_to_meters(mm_to_meters(AT))
     p0              = kPa_to_Pa(presskPa)
     pT              = kPa_to_Pa(pT)
-    T0              = celsius_to_kelvin(inTempC)
+    T0              = tempInK
     flow_kg_per_sec = flow_through_venturi(Cd, AT, p0, pT, k, T0)
     print('\nFlow in Kg per Second  : ', flow_kg_per_sec)
 
@@ -2897,16 +2914,16 @@ def temperature_menu():
         choice = selection()
         if choice == '1':
             temp = prompt('Celsius Temperature [%s]', 100.0)
-            display_temperature('', temp)
+            display_temperature('', celsius_to_kelvin(temp))
         if choice == '2':
             temp = prompt('Fahrenheit Temperature [%s]', 100.0)
-            display_temperature('', fahrenheit_to_celsius(temp))
+            display_temperature('', fahrenheit_to_kelvin(temp))
         if choice == '3':
             temp = prompt('Kevin Temperature [%s]', 273.15)
-            display_temperature('', kelvin_to_celsius(temp))
+            display_temperature('', temp)
         if choice == '4':
             temp = prompt('Rankine Temperature [%s]', 459.67)
-            display_temperature('', rankine_to_celsius(temp))
+            display_temperature('', rankine_to_kelvin(temp))
 
 def pressure_menu():
     choice = ''

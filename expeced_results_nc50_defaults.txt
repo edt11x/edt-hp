@@ -1,0 +1,702 @@
+$ python hp.py
+Menu
+ 1. Calculate Displacement
+ 2. Air Cycle
+ 3. NC50 MPH from RPM
+ 4. NC50 RPM from MPH
+ 5. Find Tuned RPM of Exhaust
+ 6. Find Tuned Length of Exhaust
+ 7. Mean Piston Speed
+ 8. Carb Sizing
+ 9. Carb Mass Flow
+10. Cylinder Head Squish Ratio
+11. Find Connecting Rod Length
+12. Find Piston Position from Angle
+13. Find Crank Angle from Piston Position
+14. Find Compression Ratio
+15. Oil Ratio Mixture
+16. Port Mapping
+17. Calculate Scooter MPH from HP
+ A. Convert Area
+ a. Convert Angular Velocity
+ b. Convert BMEP
+ d. Convert Distance
+ e. Convert Energy (Torque)
+ f. Convert Fuel energy
+ h. Convert Horsepower (Power)
+ i. Ideal Gas
+ l. Convert Liquid Capacity
+ m. Convert Mass
+ p. Convert Pressure
+ s. Convert Specific Energy
+ t. Convert Temperature
+ v. Convert Velocity
+ w. Convert Volume
+ x. Exit
+ z. Test Something
+
+Selection : 2
+
+Charles Fayette Taylor Air Cycle Computation of HP
+
+An Air Cycle is a cyclic process in which the medium is perfect gas.
+
+First we can calculate Mean Effective Pressure independent
+of the geometry, just from thermodynamics
+
+Cp(Specific Heat at Constant Press)  Btu/lbm F [0.24]  : 
+
+Cv(Specific Heat at Constant Volume) Btu/lbm F [0.1715]  : 
+
+Ratio of Specific Heats
+Heat capacity ratio or Adiabatic index or
+ratio of specific heats or Poisson constant
+is the ration of the heat capacity at a
+constant pressure to the heat capacity at a
+constant volume. gamma = Cp/Cv
+Dry Air contains
+ -- 78.09 % Nitrogen, N2
+ -- 20.95 % Oxygen,   O2
+ --  0.93 % Argon,    Ar
+ --  0.039% Carbon Dioxide, CO2
+Air contains
+ -- about 1%   water vapor at sea level
+ -- about 0.4% over the entire atmospher
+1.403 - Ratio Specific Heats Dry Air      0C
+1.400 - Ratio Specific Heats Dry Air     20C
+1.401 - Ratio Specific Heats Dry Air    100C
+1.398 - Ratio Specific Heats Dry Air    200C
+1.393 - Ratio Specific Heats Dry Air    400C
+1.365 - Ratio Specific Heats Dry Air   1000C
+1.088 - Ratio Specific Heats Dry Air   2000C
+1.470 - Ratio Specific Heats N2        -181C
+1.404 - Ratio Specific Heats N2          15C
+1.450 - Ratio Specific Heats O2        -181C
+1.415 - Ratio Specific Heats O2         -76C
+1.400 - Ratio Specific Heats O2          20C
+1.399 - Ratio Specific Heats O2         100C
+1.397 - Ratio Specific Heats O2         200C
+1.394 - Ratio Specific Heats O2         400C
+1.400 - Ratio Specific Heats NO2         20C
+1.310 - Ratio Specific Heats CO2          0C
+1.300 - Ratio Specific Heats CO2         20C
+1.281 - Ratio Specific Heats CO2        100C
+1.235 - Ratio Specific Heats CO2        400C
+1.195 - Ratio Specific Heats CO2       1000C
+1.320 - Ratio Specific Heats CH4 Methane 20C
+1.343 - Ratio Specific Heats Gasoline Exhaust
+Computed Adiabatic Ratio or Constant[1.3994169096209912] : 
+
+
+
+Barometric Pressure (check weather app)
+or enter manifold pressure if partial throttle
+Fully closed throttle is probably 12 inHg
+Wide Open Throttle is probably close to Barometric
+There is about 1 inHg per 1000 feet of altitude
+Barometric Pressure in inHg [29.92 std] : 
+
+
+Pounds per Square Inch :  14.69533223391132
+Bar                    :  1.013207489068212
+Pascals                :  101320.74890682119
+Kilo Pascals           :  101.3207489068212
+Mega Pascals           :  0.10132074890682119
+Inches of Mercury      :  29.92
+Inches of Water        :  407.1722749832068
+Standard Atmospheres   :  0.9999580449723285
+Torr                   :  759.9681141789697
+
+Intake Air Temperaturein deg F [100] : 
+
+Intake Air Temperature
+Kelvin                 :  310.9278
+Celsius                :  37.7778
+Fahrenheit             :  100.0
+Rankine                :  559.67
+
+Forced Air Induction
+Super/Turbo Charger Boost in PSI [0] : 
+
+
+CR = (Swept_Volume + Clearance_Volume) / Clearance_Volume
+ or 
+CR = Maximum Cylinder Volume / Minimum Cylinder Volume
+From Heywood:
+Spark       Ignition (SI) 8 to 12
+Compression Ignition (CI) 12 to 24
+NC50 stock        - 6.5
+NC50 shocko       - 6.5
+TRX250R           - 10.0
+06 SXR 800 Stock  - 7.2
+ZXI 1100 stock    - 5.8
+57 272 Yblk       - 7.8
+77 Cad  425       - 8.2
+87 Must 5.0       - 9.0
+04 Monte SC 3800  - 8.5
+04 Must GT 4.6L   - 9.4
+95 Probe GT 2.5l  - 9.2
+16 Ford Voodo 5.2 - 12.0
+18 Ford Coyote5.0 - 12.0
+Effective Compression Ratio [6.5] : 
+
+
+Fuel Specific Energy
+Fuel Specific Energy in BTUs/lb
+Energy from Combustion (Cooling Effect)
+Hydrogen                                   = 61,049 BTUs/lb,       142 MJ/kg
+Methane                                    = 23,861 BTUs/lb,       55.5 MJ/kg
+Diesel/Fuel Oil                            = 20,636 BTUs/lb,       48 MJ/kg
+LPG/Propane/Butane                         = 19,948 BTUs/lb,       46.4 MJ/kg
+Jet fuel/Kerosene                          = 19,776 BTUs/lb,       46 MJ/kg
+Animal/Veg. Fat                            = 15,907 BTUs/lb,       37 MJ/kg
+Dimethy Ether DME                          = 12,382 BTUs/lb,       28.8 MJ/kg
+Ethonal E100                               = 11,350 BTUs/lb,       26.4 MJ/kg
+Methonal M100                              = 8,469  BTUs/lb,       19.7 MJ/kg
+Gasoline Zittel, Werner & Reinhold Wurster = 19,647 BTUs/lb,       45.7 MJ/kg
+Gasoline Caldirola, Manuela                = 20,421 BTUs/lb,       47.5 MJ/kg
+Gasoline Thomas, George - Sandia Labs      = 19,089 BTUs/lb,       44.4 MJ/kg
+Gasoline Low Range Val - Nommensen, Arthur = 15,649 BTUs/lb,       36.4 MJ/kg
+Gasoline Hi  Range Val - Nommensen, Arthur = 21,324 BTUs/lb,       49.6 MJ/kg
+Gasoline Harrison, Reid R.                 = 18,917 BTUs/lb,       44.0 MJ/kg
+Gasoline E10                               = 18,719 BTUs/lb,       43.54 MJ/kg
+Gasoline E85                               = 14,230 BTUs/lb,       33.1 MJ/kg
+VP C-12                                    = 18,834 BTUs/lb,       43.81 MJ/kg
+Pump Gas                                   = 17,920 BTUs/lb,       41.68 MJ/kg
+Acetone                                    = 12,000 BTUs/lb (225), 27.91 MJ/kg
+Benzole                                    = 17,000 BTUs/lb (153), 39.54 MJ/kg
+Ether                                      = 15,000 BTUs/lb (153), 34.89 MJ/kg
+Methonal                                   =  9,770 BTUs/lb (472), 22.73 MJ/kg
+Nitrobenzene                               = 10,800 BTUs/lb (143), 25.12 MJ/kg
+Nitromethane                               =  5,000 BTUs/lb (258), 11.63 MJ/kg
+Prop. Oxide                                = 14,000 BTUs/lb (220), 32.56 MJ/kg
+Diborane                                   = 33,620 BTUs/lb,       78.2 MJ/kg
+Natural Gas, LNG at -160C, CNG at 250 bar  = 23,044 BTUs/lb,       53.6 MJ/kg
+Cude Oil                                   = 19,905 BTUs/lb,       46.3 MJ/kg
+Residential Heating Oil                    = 19,862 BTUs/lb,       46.2 MJ/kg
+Diesel fuel                                = 19,604 BTUs/lb,       45.6 MJ/kg
+Jet A Aviation Fuel/Kerosene               = 18,401 BTUs/lb,       42.8 MJ/kg
+Biodiesel oil/Vegetable Oil                = 18,143 BTUs/lb,       42.2 MJ/kg
+Dimethylfuran (DMF)                        = 18,057 BTUs/lb,       42.0 MJ/kg
+Body Fat metabolism                        = 16,337 BTUs/lb,       38.0 MJ/kg
+Hydrazine                                  = 8,383 BTUs/lb,       19.5 MJ/kg
+Liquid Ammonia                             = 7,739 BTUs/lb,       18.0 MJ/kg
+Fuel Energy in BTUs/lb [17920] : 
+
+
+Fuel Air Ratio
+Air/Fuel Ratio
+Gasoline Lean               -  15.00, lambda - 1.0204
+Gasoline Stoichiometric     -  14.70, lambda - 1.0000
+Gasoline Max Power Rich     -  12.50, lambda - 0.8503
+Gasoline Max Power Lean     -  13.23, lambda - 0.9000
+Gasoline E10 Stoichiometric -  14.08, lambda - 1.0000
+Gasoline E10 Max Power Rich -  12.00, lambda - 0.8523
+Gasoline E10 Max Power Lean -  12.70, lambda - 0.9020
+Gasoline E15 Stoichiometric -  13.79, lambda - 1.0000
+Gasoline E15 Max Power Rich -  11.75, lambda - 0.8521
+Gasoline E15 Max Power Lean -  12.44, lambda - 0.9018
+Gasoline E85 Stoichiometric -   9.75, lambda - 0.9985
+Gasoline E85 Max Power Rich -   6.97, lambda - 0.7143
+Gasoline E85 Max Power Lean -   8.47, lambda - 0.8673
+Ethanol Stoichiometric      -   9.01, lambda - 1.0000
+Ethanol Max Power Rich      -   6.43, lambda - 0.7137
+Ethanol Max Power Lean      -   7.80, lambda - 0.8659
+Acetone  Max Power          -   9.40, lambda - 1.0000
+Benzole  Max Power          -  10.80, lambda - 1.0000
+Ether    Max Power          -   9.80, lambda - 1.0000
+Methonal Stoichiometric     -   6.45, lambda - 1.0000
+Methonal Max Power          -   4.50, lambda - 0.6977
+Methonal Peak Torque        -   4.00, lambda - 0.6202
+Propane  Stoichiometric     -  15.70, lambda - 1.0000
+Propane  Max Power Rich     -  13.18, lambda - 0.8395
+Nitrobenzene Max            -   8.10, lambda - 1.0000
+Nitromethane Rich Consv.    -  10.10, lambda - 1.5538
+Nitromethane Conservative   -   6.50, lambda - 1.0000
+Nitromethane Max Power      -   2.50, lambda - 0.3846
+Nitromethane Max Power      -   0.50, lambda - 0.0769
+Propylene Oxide Max         -   9.60, lambda - 1.0000
+Fuel Air Ratio [14.6] : 
+
+
+Volumetric Efficiency
+The volumetric efficiency is a factor determined by
+the efficiency of the turbo, the electronic control
+systems, the type of carb or fuel injection and the
+variation of valve timing or opening.
+
+A carburated engine normally has a vol eff of 0.70-0.80
+but electronics can raise this figure as high as 2.0.
+
+A diesel engine (2 cycle or 4 cycle) normally has a
+volumetric efficiency of 0.90.
+
+A turbo can raise the volumetric efficiency to between
+1.5 and 3.0. If you do not know this value for your
+turbo, it is best to use 3.0
+
+60s-80s Stock Engines = 0.75 - 0.85
+Modern  Stock Engines = 0.85 - 0.95
+Mild Built            = 0.85 - 0.90
+Racing Engines        = 0.90 - 1.00
+2Stroke Good Pipe     = 1.00
+2Stroke OK   Pipe     = 0.90
+1950s or 1960s cars   = 0.85
+1980s or 1990s cars   = 0.90
+Well designed normal aspirated engines 1.0
+Volumetric Efficiency [0.9] : 
+
+
+Scavange Ratio
+Est. of Scavange Ratio based on Compression -  0.8461538461538461
+Scavange Ratio [0.8461538461538461] : 
+
+
+Heat added per unit mass of gas (Q') in btus/lb
+Q' Computed 1038.5669125395154
+Value to use for Q' [1038.5669125395154]  : 
+
+
+Thermal Efficiency
+Increasing the compression ratio of an
+engine can improve the thermal efficiency
+of the engine by producing more power output.
+The ideal theoretical cycle, the Otto cycle,
+upon which spark ignition (SI) engines are
+based, has a thermal efficiency, which
+increases with compression ratio, and is
+given by 
+1 - (1/cr) ** (k-1), where k = 1.4 for air
+Thermal Efficiency       :  0.5265123461450332
+Efficiency as Percentage :  52.651234614503316
+
+Q' / (T1 * Cv)          :  9.738248203276012
+
+Engine Losses
+  Thermal radiator, exh heat : 56 - 60%
+  Combustion                 : 3%
+  Pumping Losses             : 3%
+  Friction                   : 3%
+Parasitic Losses
+  Water Pump, Alternator     : 3 - 4%
+Power to Wheels
+  Wind Resistance            : 13 - 19%
+  Rolling Resistance         : 6 - 9%
+Drivetrain Losses            : 4 - 7%
+Overall Mechanical Efficiency [0.53] : 
+
+
+
+Calculated Mean Effective Pressure before efficiency
+Typical Mean Effective Pressure at max Torque
+Natural asp. spark-ign : 8.5-10.5 bar 850-1050kPa 125-150 psi
+Boosted spark ignition : 12.5-17  bar 1.25-1.7MPa 180-250 psi
+Natural asp. 4s diesels:    7-9   bar 700-900 kPa 100-130 psi
+Boosted car 4s diesels : 14-18    bar 1.4-1.8 MPa 200-269 psi
+Large low speed 2s dies: up to 19 bar 1.9 MPa 275 psi.
+Ultra boosted engines  : up to 28 bar 32 bar for the Agera R
+Top Fuel dragster      : 80-100   bar 8.0-10MPa 1160-1450 psi
+
+Jennings Two Stroke Tuners Handbook
+2s low speed smooth    :  4.8      bar (70 psi)
+2s ported and plumbing :  7.9      bar (115 psi)
+2s highly developed    :  8.6      bar (125 psi)
+2s Enduro              :  8.0      bar (116 psi)
+2s Motocross           :  9.0      bar (130 psi)
+2s Road Race           : 11.0      bar (160 psi)
+
+95 Probe GT 2.5l       : 10.6      bar
+
+
+Pounds per Square Inch :  222.94258300425327
+Bar                    :  15.371349972670787
+Pascals                :  1537134.9972670786
+Kilo Pascals           :  1537.1349972670787
+Mega Pascals           :  1.5371349972670787
+Inches of Mercury      :  453.9157044775332
+Inches of Water        :  6177.2022073102335
+Standard Atmospheres   :  15.170342928863347
+Torr                   :  11529.460625936144
+
+
+
+Indicated  Mean Effective Pressure
+Typical Mean Effective Pressure at max Torque
+Natural asp. spark-ign : 8.5-10.5 bar 850-1050kPa 125-150 psi
+Boosted spark ignition : 12.5-17  bar 1.25-1.7MPa 180-250 psi
+Natural asp. 4s diesels:    7-9   bar 700-900 kPa 100-130 psi
+Boosted car 4s diesels : 14-18    bar 1.4-1.8 MPa 200-269 psi
+Large low speed 2s dies: up to 19 bar 1.9 MPa 275 psi.
+Ultra boosted engines  : up to 28 bar 32 bar for the Agera R
+Top Fuel dragster      : 80-100   bar 8.0-10MPa 1160-1450 psi
+
+Jennings Two Stroke Tuners Handbook
+2s low speed smooth    :  4.8      bar (70 psi)
+2s ported and plumbing :  7.9      bar (115 psi)
+2s highly developed    :  8.6      bar (125 psi)
+2s Enduro              :  8.0      bar (116 psi)
+2s Motocross           :  9.0      bar (130 psi)
+2s Road Race           : 11.0      bar (160 psi)
+
+95 Probe GT 2.5l       : 10.6      bar
+
+
+Pounds per Square Inch :  118.15956899225424
+Bar                    :  8.146815485515518
+Pascals                :  814681.5485515518
+Kilo Pascals           :  814.6815485515517
+Mega Pascals           :  0.8146815485515517
+Inches of Mercury      :  240.5753233730926
+Inches of Water        :  3273.9171698744244
+Standard Atmospheres   :  8.040281752297574
+Torr                   :  6110.614131746156
+
+
+Cylinder Pressure at Intake Close
+Pounds per Square Inch :  14.69533223391132
+Bar                    :  1.013207489068212
+Pascals                :  101320.74890682119
+Kilo Pascals           :  101.3207489068212
+Mega Pascals           :  0.10132074890682119
+Inches of Mercury      :  29.92
+Inches of Water        :  407.1722749832068
+Standard Atmospheres   :  0.9999580449723285
+Torr                   :  759.9681141789697
+
+Mixture Temperature at Intake Close
+Kelvin                 :  310.9278
+Celsius                :  37.7778
+Fahrenheit             :  100.0
+Rankine                :  559.67
+
+Cylinder Pressure at Peak Compression
+Pounds per Square Inch :  201.73632563116848
+Bar                    :  13.909229998551721
+Pascals                :  1390922.9998551721
+Kilo Pascals           :  1390.922999855172
+Mega Pascals           :  1.390922999855172
+Inches of Mercury      :  410.7393263934414
+Inches of Water        :  5589.6278727502495
+Standard Atmospheres   :  13.727342707675026
+Torr                   :  10432.78045783302
+
+Mixture Temperature at Peak Compression
+Kelvin                 :  656.6756
+Celsius                :  383.5256
+Fahrenheit             :  722.346
+Rankine                :  1182.016
+
+Cylinder Pressure at Combustion
+Pounds per Square Inch :  1131.9304783334696
+Bar                    :  78.04385906331976
+Pascals                :  7804385.906331976
+Kilo Pascals           :  7804.385906331976
+Mega Pascals           :  7.804385906331976
+Inches of Mercury      :  2304.63383696656
+Inches of Water        :  31363.06826206388
+Standard Atmospheres   :  77.02330033389563
+Torr                   :  58537.708253760684
+
+Cylinder Temperature at Combustion
+Kelvin                 :  3684.5674
+Celsius                :  3411.4174
+Fahrenheit             :  6172.5514
+Rankine                :  6632.2214
+
+Cylinder Pressure at Exhaust
+Pounds per Square Inch :  82.45463177123769
+Bar                    :  5.685046727027533
+Pascals                :  568504.6727027533
+Kilo Pascals           :  568.5046727027533
+Mega Pascals           :  0.5685046727027533
+Inches of Mercury      :  167.87933360924103
+Inches of Water        :  2284.6193244765846
+Standard Atmospheres   :  5.610704887271189
+Torr                   :  4264.135714326104
+
+Cylinder Temperature at Exhaust
+Kelvin                 :  1744.5972
+Celsius                :  1471.4472
+Fahrenheit             :  2680.605
+Rankine                :  3140.275
+
+
+Current Indicated Mean Effective Pressure
+Typical Mean Effective Pressure at max Torque
+Natural asp. spark-ign : 8.5-10.5 bar 850-1050kPa 125-150 psi
+Boosted spark ignition : 12.5-17  bar 1.25-1.7MPa 180-250 psi
+Natural asp. 4s diesels:    7-9   bar 700-900 kPa 100-130 psi
+Boosted car 4s diesels : 14-18    bar 1.4-1.8 MPa 200-269 psi
+Large low speed 2s dies: up to 19 bar 1.9 MPa 275 psi.
+Ultra boosted engines  : up to 28 bar 32 bar for the Agera R
+Top Fuel dragster      : 80-100   bar 8.0-10MPa 1160-1450 psi
+
+Jennings Two Stroke Tuners Handbook
+2s low speed smooth    :  4.8      bar (70 psi)
+2s ported and plumbing :  7.9      bar (115 psi)
+2s highly developed    :  8.6      bar (125 psi)
+2s Enduro              :  8.0      bar (116 psi)
+2s Motocross           :  9.0      bar (130 psi)
+2s Road Race           : 11.0      bar (160 psi)
+
+95 Probe GT 2.5l       : 10.6      bar
+
+
+Pounds per Square Inch :  118.15956899225424
+Bar                    :  8.146815485515518
+Pascals                :  814681.5485515518
+Kilo Pascals           :  814.6815485515517
+Mega Pascals           :  0.8146815485515517
+Inches of Mercury      :  240.5753233730926
+Inches of Water        :  3273.9171698744244
+Standard Atmospheres   :  8.040281752297574
+Torr                   :  6110.614131746156
+
+
+
+BMEP Menu
+1. Find HP from Displacement, Cycles and RPM
+2. Find RPM from Cycles, Displacement and HP
+3. Find Displacement from HP, Cycles and RPM
+4. Find Intake CFM from IMEP, Displacement, Cycles and RPM
+x. Exit
+
+Selection : 1
+Two Stroke or Four Stroke?
+Number of Engine Cycles [2] : 
+
+
+
+Choose Displacement Calculation
+b. Bore - Stroke - Cyl
+d. Final Displacement (Swept Volume)
+
+Selection : b
+Choice is -  b
+
+Displacement
+From Heywood
+Bore/Stroke small and medium engines 0.8 to 1.2
+Bore/Stroke large slow speed CI engines 0.5 to 0.8
+NC50 stock  bore -  40.0 , stroke  39.6 , cyl 1, b/s 1.01
+NC50 shocko bore -  44.0 , stroke  39.6 , cyl 1, b/s 1.11
+NC50 athena bore -  47.6 , stroke  39.6 , cyl 1, b/s 1.2
+NC50 metra  bore -  47.0 , stroke  39.6 , cyl 1, b/s 1.19
+TRX250R     bore -  66.0 , stroke  72.0 , cyl 1, b/s 0.92
+ZXI  1100   bore -  80.0 , stroke  71.0 , cyl 3, b/s 1.13
+06 SXR 800  bore -  82.0 , stroke  74.0 , cyl 2, b/s 1.11
+56 272 Yblk bore -  91.9 , stroke  83.8 , cyl 8, b/s 1.1
+77 Cad  425 bore - 103.7 , stroke 103.0 , cyl 8, b/s 1.01
+87 Must 5.0 bore - 101.6 , stroke  76.2 , cyl 8, b/s 1.33
+95 Probe2.5 bore -  84.5 , stroke  74.2 , cyl 6, b/s 1.14
+04 MC SC3.8 bore -  96.5 , stroke  87.4 , cyl 6, b/s 1.1
+04 Must 4.6 bore -  90.2 , stroke  90.0 , cyl 8, b/s 1.0
+16 Ford 5.2 bore -  94.0 , stroke  93.0 , cyl 8, b/s 1.01
+18 Ford 5.0 bore -  93.0 , stroke  92.7 , cyl 8, b/s 1.0
+Bore in mm [40.0] : 
+
+Bore
+Millimeters            :  40.0
+Centimeters            :  4.0
+Meters                 :  0.04
+Inches                 :  1.5748031496062993
+Feet                   :  0.13123359580052493
+Yards                  :  0.04374453193350831
+Kilometers             :  4e-05
+Miles                  :  2.4854847689493357e-05
+
+From Heywood
+Bore/Stroke small and medium engines 0.8 to 1.2
+Bore/Stroke large slow speed CI engines 0.5 to 0.8
+NC50 stock  bore -  40.0 , stroke  39.6 , cyl 1, b/s 1.01
+NC50 shocko bore -  44.0 , stroke  39.6 , cyl 1, b/s 1.11
+NC50 athena bore -  47.6 , stroke  39.6 , cyl 1, b/s 1.2
+NC50 metra  bore -  47.0 , stroke  39.6 , cyl 1, b/s 1.19
+TRX250R     bore -  66.0 , stroke  72.0 , cyl 1, b/s 0.92
+ZXI  1100   bore -  80.0 , stroke  71.0 , cyl 3, b/s 1.13
+06 SXR 800  bore -  82.0 , stroke  74.0 , cyl 2, b/s 1.11
+56 272 Yblk bore -  91.9 , stroke  83.8 , cyl 8, b/s 1.1
+77 Cad  425 bore - 103.7 , stroke 103.0 , cyl 8, b/s 1.01
+87 Must 5.0 bore - 101.6 , stroke  76.2 , cyl 8, b/s 1.33
+95 Probe2.5 bore -  84.5 , stroke  74.2 , cyl 6, b/s 1.14
+04 MC SC3.8 bore -  96.5 , stroke  87.4 , cyl 6, b/s 1.1
+04 Must 4.6 bore -  90.2 , stroke  90.0 , cyl 8, b/s 1.0
+16 Ford 5.2 bore -  94.0 , stroke  93.0 , cyl 8, b/s 1.01
+18 Ford 5.0 bore -  93.0 , stroke  92.7 , cyl 8, b/s 1.0
+Stroke in mm [39.6] : 
+
+Stroke
+Millimeters            :  39.6
+Centimeters            :  3.96
+Meters                 :  0.0396
+Inches                 :  1.5590551181102363
+Feet                   :  0.1299212598425197
+Yards                  :  0.043307086614173235
+Kilometers             :  3.96e-05
+Miles                  :  2.4606299212598428e-05
+
+1985-1986 TRX250R - 125.3 mm
+1987-1989 TRX250R - 130.3 mm
+1977 NC50         -  80.0 mm
+56 272 Yblk       -  160.6 mm
+87 Must 5.0       - 129.286 mm, 5.090 in
+04 Must 4.6       - 150.7 mm
+04 Monte Carlo SC - 143.0 mm
+16 Ford 5.2 Voodo - 150.7 mm
+Connecting Rod Length in mm [80] : 
+
+Connecting Rod Length
+Millimeters            :  80.0
+Centimeters            :  8.0
+Meters                 :  0.08
+Inches                 :  3.1496062992125986
+Feet                   :  0.26246719160104987
+Yards                  :  0.08748906386701662
+Kilometers             :  8e-05
+Miles                  :  4.9709695378986714e-05
+
+Ratio of Bore to Stroke
+Ratio                  :  1.0101010101010102
+
+Ratio of Connecting Rod Length to Crank Radius
+Ratio                  :  4.040404040404041
+
+Ratio of Connecting Rod Length to Stroke      
+Ratio                  :  2.0202020202020203
+
+Displacement per Cylinder
+Volume in cc           :  49.762827632862326
+Volume in liters       :  0.04976282763286233
+Volume in milliliters  :  49.762827632862326
+Volume in cubic inches :  3.0367140588980632
+Volume in cubic feet   :  0.0017573576729734161
+
+Cylinders [1] : 
+
+
+Displacement
+Volume in cc           :  49.762827632862326
+Volume in liters       :  0.04976282763286233
+Volume in milliliters  :  49.762827632862326
+Volume in cubic inches :  3.0367140588980632
+Volume in cubic feet   :  0.0017573576729734161
+
+
+NC50 stock rated  HP   2.5 @7000
+NC50 stock        HP   4.5 @7000
+NC50 shocko       HP   9.0 @8800
+TRX250R           HP  42.0 @7500
+06 SXR 800 Stock  HP  80.0 @6250
+ZXI 1100 Stock    HP 120.0 @6750
+ZXI 1100 dry pipe HP 150.0 @8000
+77 Cad  425       HP 185.0 @4000
+87 Must 5.0       HP 220.0 @4200
+95 Probe GT 2.5l  HP 164.0 @5600
+04 Monte SC Stock HP 190.0 @5200
+04 Must 4.6 Stock HP 213.0 @4400
+04 Must 4.6 Tuned HP 252.0 @5250
+16 Ford Voodo 5.2 HP 526.0 @7500
+18 Ford Coyete5.0 HP 460.0 @7000
+RPM [7000.0] : 
+
+
+Intake CFM, Cubic Feet per Minute
+Cubic CM (CC) per Second :  5225.096901450544
+Cubic Feet per Min (CFM) :  11.07135333973252
+Liters per Second        :  5.225096901450543
+Liters per Minute        :  313.5058140870326
+
+NC50 stock rated  HP   2.5 @7000
+NC50 stock        HP   4.5 @7000
+NC50 shocko       HP   9.0 @8800
+TRX250R           HP  42.0 @7500
+06 SXR 800 Stock  HP  80.0 @6250
+ZXI 1100 Stock    HP 120.0 @6750
+ZXI 1100 dry pipe HP 150.0 @8000
+77 Cad  425       HP 185.0 @4000
+87 Must 5.0       HP 220.0 @4200
+95 Probe GT 2.5l  HP 164.0 @5600
+04 Monte SC Stock HP 190.0 @5200
+04 Must 4.6 Stock HP 213.0 @4400
+04 Must 4.6 Tuned HP 252.0 @5250
+16 Ford Voodo 5.2 HP 526.0 @7500
+18 Ford Coyete5.0 HP 460.0 @7000
+
+
+Horsepower
+HP US or Imperial      :  6.342721633704197
+HP metric (aka PS)     :  6.430693060641242
+HP (UK)                :  6.3401709413582035
+Watts                  :  4729.766708
+Kilo Watts             :  4.729767
+BTUs per Second        :  4.482953234458936
+BTUs per Minute        :  268.9771940675362
+BTUs per Hour(aka BTUs):  16138.63164405217
+Foot-Lbs  per Second   :  3488.4968985373084
+Foot-Lbs  per Minute   :  209309.81391223852
+kg-meters per Second   :  482.30197954809313
+
+
+Horsepower per liter
+HP US or Imperial/liter:  127.45902786110162
+HP metric(aka PS)/liter:  129.2268419328034
+HP (UK)          /liter:  127.40777087938804
+
+
+Torque
+Energy in Pound Feet   :  4.758955931682502
+Energy in Pound Inches :  57.107471180190025
+Energy in Kg Meters    :  0.6579492352121589
+Energy in Newton Meters:  6.452277867493318
+Energy in Joules       :  6.452277867493318
+Energy in BTUs         :  0.006115578573548055
+Energy in calories     :  1.5421314214850186
+
+
+BMEP Menu
+1. Find HP from Displacement, Cycles and RPM
+2. Find RPM from Cycles, Displacement and HP
+3. Find Displacement from HP, Cycles and RPM
+4. Find Intake CFM from IMEP, Displacement, Cycles and RPM
+x. Exit
+
+Selection : x
+
+Menu
+ 1. Calculate Displacement
+ 2. Air Cycle
+ 3. NC50 MPH from RPM
+ 4. NC50 RPM from MPH
+ 5. Find Tuned RPM of Exhaust
+ 6. Find Tuned Length of Exhaust
+ 7. Mean Piston Speed
+ 8. Carb Sizing
+ 9. Carb Mass Flow
+10. Cylinder Head Squish Ratio
+11. Find Connecting Rod Length
+12. Find Piston Position from Angle
+13. Find Crank Angle from Piston Position
+14. Find Compression Ratio
+15. Oil Ratio Mixture
+16. Port Mapping
+17. Calculate Scooter MPH from HP
+ A. Convert Area
+ a. Convert Angular Velocity
+ b. Convert BMEP
+ d. Convert Distance
+ e. Convert Energy (Torque)
+ f. Convert Fuel energy
+ h. Convert Horsepower (Power)
+ i. Ideal Gas
+ l. Convert Liquid Capacity
+ m. Convert Mass
+ p. Convert Pressure
+ s. Convert Specific Energy
+ t. Convert Temperature
+ v. Convert Velocity
+ w. Convert Volume
+ x. Exit
+ z. Test Something
+
+Selection : x
+Done.
