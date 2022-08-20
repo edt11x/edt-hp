@@ -19,10 +19,13 @@ from __future__ import print_function
 import math
 import sys
 
-# Try to include modules we would like to use.
+# Try to include modules we would like to use. We want the program to work
+# whether or not these modules are available. We just want the program to be
+# able to take advantage of them, if they are available.
+#
 # Really, right now, we just want mpmath to get more precision, this helps with
-# rounding errors when converting back and forth
-libnames = ['numpy', 'scipy', 'operator', 'mpmath', 'pylab']
+# rounding errors when converting back and forth.
+libnames = ['numpy', 'scipy', 'operator', 'mpmath', 'pylab', 'numexpr']
 for libname in libnames:
     try:
         lib = __import__(libname)
@@ -1775,8 +1778,12 @@ def display_mean_piston_speed(title, ms):
 
 def prompt(s, default):
     val = input((s % default) + ' : ')
+    try:
+        resolved = numexpr.evaluate(val).item() # allow math like (1 + 7) * 100 on the input lines
+    except:
+        resolved = val # on IOS or Android we probably will not have the numexpr module
     print('')
-    return float(val or default)
+    return float(resolved or default)
 
 def selection():
     print('')
