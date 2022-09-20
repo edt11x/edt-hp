@@ -586,11 +586,15 @@ def ft_lbs_to_calories(ft_lbs_force):
 # numerically the same. If you do 100 joules of work in one second (using 100
 # joules of energy), the power is 100 watts.
 #
-# Power = Work / time
+# Power = Work / Time
+#
+# Work = Force * Distance
+#
+# Velocity = Distance / Time
 #
 # or
 #
-# Power = Force * velocity
+# Power = Force * Velocity
 #
 HP_TO_FT_LBS_PER_SEC = 550
 HP_TO_FT_LBS_PER_MIN = HP_TO_FT_LBS_PER_SEC * SEC_PER_MIN
@@ -1711,6 +1715,7 @@ def display_volume(title, cc):
     print('Volume in cubic inches : ',cc_to_ci(cc))
     print('Volume in cubic feet   : ',cc_to_cf(cc))
     print('')
+
 def display_mass(title, kg):
     print(title)
     print('Mass   in kilograms    : ',kg)
