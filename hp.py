@@ -51,6 +51,21 @@ except NameError: pass
 
 #
 # Next Steps
+# * Want to start doing electric vs gasoline calculations
+# * If I know that gasoline has an energy density of 18,000 BTUs per pound, a car that can go 35 miles per gallon, how can I compute the cents per watt-hour that the car has?
+# * What does it cost per mile to drive a car?
+# * If I know how big a battery is in a Tesla, how many miles you can go on it, I should be able to find dollars per mile
+#   * What does it cost to drive a Tesla per mile on different battery types
+#   * Need cost of electricity in kilowatt (kW) hours
+# * If I know how many miles per gallon of gasoline, 
+#   * Need to convert BTUs per lb into BTUs per gallon
+#   * I will need a conversion of BTUs per lb into BTUs per gallon at a temperature
+#   * It would be nice to list BTUs per gallon in list_fuel_specific_energy()
+#   * It would be nice to list kW per gallon in list_fuel_specific_energy()
+# * Need to compute kW hours from BTUs, we should have kW_to_BTU and BTU_to_kW conversions
+# * Need to calculate energy per mile
+# * Need to calculate cost per mile, given a fuel, a cost per gallon, energy used per mile
+# * If I know miles per gallon, cost per gallon, I should be able to list cost per mile for a number of types of fuel
 # * Compute HP loss or gain based on Barometric Pressure and Temperature
 # * Can I make an estimate of manifold vacuum at wide open throttle
 #   based on a carb that is too small?
@@ -2446,7 +2461,7 @@ def prompt_squish_ratio():
     display_ratio('Squish Area Ratio', ratio)
 
 def prompt_trapped_compression_ratio():
-    print('\Trapped Compression Ratio')
+    print('\nTrapped Compression Ratio')
     sv = ask_displacement()
     crl = ask_connecting_rod_length()
     epo = ask_exhaust_port_open()
